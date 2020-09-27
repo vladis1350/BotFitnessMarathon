@@ -1,11 +1,15 @@
-package com.example.fitnessMarathonBot.botapi;
+package com.example.fitnessMarathonBot.botapi.client.teleframUserFacade;
 
 import com.example.fitnessMarathonBot.bean.Bot;
 import com.example.fitnessMarathonBot.bean.UserProfileData;
+import com.example.fitnessMarathonBot.botapi.BotState;
+import com.example.fitnessMarathonBot.botapi.BotStateContext;
 import com.example.fitnessMarathonBot.cache.UserDataCache;
 import com.example.fitnessMarathonBot.service.LocaleMessageService;
-import com.example.fitnessMarathonBot.service.MainMenuService;
+import com.example.fitnessMarathonBot.service.UserMainMenuService;
 import com.example.fitnessMarathonBot.service.ReplyMessagesService;
+import lombok.Getter;
+import lombok.Setter;
 import lombok.SneakyThrows;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.context.annotation.Lazy;
@@ -27,19 +31,21 @@ import java.io.FileWriter;
  */
 @Component
 @Slf4j
-public class TelegramFacade {
+@Getter
+@Setter
+public class TelegramUserFacade {
     private BotStateContext botStateContext;
     private UserDataCache userDataCache;
-    private MainMenuService mainMenuService;
+    private UserMainMenuService userMainMenuService;
     private Bot myBot;
     private ReplyMessagesService messagesService;
 
 
-    public TelegramFacade(BotStateContext botStateContext, UserDataCache userDataCache, MainMenuService mainMenuService,
-                          @Lazy Bot myBot, ReplyMessagesService messagesService) {
+    public TelegramUserFacade(BotStateContext botStateContext, UserDataCache userDataCache, UserMainMenuService userMainMenuService,
+                              @Lazy Bot myBot, ReplyMessagesService messagesService) {
         this.botStateContext = botStateContext;
         this.userDataCache = userDataCache;
-        this.mainMenuService = mainMenuService;
+        this.userMainMenuService = userMainMenuService;
         this.myBot = myBot;
         this.messagesService = messagesService;
     }
@@ -74,13 +80,16 @@ public class TelegramFacade {
 
         switch (inputMsg) {
             case "/start":
+                botState = BotState.ASK_START;
+                break;
+            case "Ввод антропометрических данных":
                 botState = BotState.ASK_PERSONAL_INFO;
                 break;
             case "План на сегодня":
                 botState = BotState.PLAN_FOR_TODAY;
                 break;
-            case "Ежедневный отчет":
-                botState = BotState.DAILY_REPORT;
+            case "Ежедневный отчёт":
+                botState = BotState.REPORT_OF_THE_DAY;
                 break;
             case "Моя информация":
 //                myBot.sendDocument(chatId, "Ваши данные", getUsersProfile(userId));
@@ -97,7 +106,6 @@ public class TelegramFacade {
         userDataCache.setUsersCurrentBotState(userId, botState);
 
         replyMessage = botStateContext.processInputMessage(botState, message);
-
         return replyMessage;
     }
 
@@ -106,22 +114,28 @@ public class TelegramFacade {
         final long chatId = buttonQuery.getMessage().getChatId();
         final int userId = buttonQuery.getFrom().getId();
         LocaleMessageService localeMessageService;
+        BotApiMethod<?> callBackAnswer = userMainMenuService.getUserMainMenuMessage(chatId, "Профиль успешно заполнен, свои данные вы можете просмотреть в разделе главного меню \"Моя информация\" \nВоспользуйтесь главным меню");
 
-        BotApiMethod<?> callBackAnswer = mainMenuService.getMainMenuMessage(chatId, "Воспользуйтесь главным меню");
+        if (buttonQuery.getData().equals("buttonEctomorph")) {
+            UserProfileData userProfileData = userDataCache.getUserProfileData(userId);
+            userProfileData.setPhysique("Эктоморф");
+            userDataCache.saveUserProfileData(userId, userProfileData);
 
-
-        //From Destiny choose buttons
-//        if (buttonQuery.getData().equals("buttonInternetMagazineAndServices")) {
-//            callBackAnswer = new SendMessage(chatId, messagesService.getReplyText("reply.askTotalNumber"));
-//
-//            userDataCache.setUsersCurrentBotState(userId, BotState.ASK_TAPESCOLOR);
-//        } else if (buttonQuery.getData().equals("buttonPromotionsAndDiscounts")) {
-//            callBackAnswer = sendAnswerCallbackQuery("У нас для вас скидки", false, buttonQuery);
-//        } else if (buttonQuery.getData().equals("buttonPaymentAndDelivery")) {
-//            callBackAnswer = new SendMessage(chatId, messagesService.getReplyText("reply.PaymentAndDelivery"));
-//
-//        }
-
+            userDataCache.setUsersCurrentBotState(userId, BotState.PROFILE_FILLED);
+        } else if (buttonQuery.getData().equals("buttonMezomorph")) {
+            UserProfileData userProfileData = userDataCache.getUserProfileData(userId);
+            userProfileData.setPhysique("Мезоморф");
+            userDataCache.saveUserProfileData(userId, userProfileData);
+            userDataCache.setUsersCurrentBotState(userId, BotState.PROFILE_FILLED);
+        } else if (buttonQuery.getData().equals("buttonEndomorph")) {
+            UserProfileData userProfileData = userDataCache.getUserProfileData(userId);
+            userProfileData.setPhysique("Эндоморф");
+            userDataCache.saveUserProfileData(userId, userProfileData);
+            userDataCache.setUsersCurrentBotState(userId, BotState.PROFILE_FILLED);
+        } else if (buttonQuery.getData().equals("buttonInputPersonalInfo")){
+            callBackAnswer = new SendMessage(chatId, "Как вас зовут?");
+            userDataCache.setUsersCurrentBotState(userId, BotState.ASK_AGE);
+        }
 
         return callBackAnswer;
 

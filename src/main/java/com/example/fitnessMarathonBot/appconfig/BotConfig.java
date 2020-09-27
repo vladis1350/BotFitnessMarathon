@@ -1,7 +1,8 @@
 package com.example.fitnessMarathonBot.appconfig;
 
 import com.example.fitnessMarathonBot.bean.Bot;
-import com.example.fitnessMarathonBot.botapi.TelegramFacade;
+import com.example.fitnessMarathonBot.botapi.admin.telegramAdminFacade.TelegramAdminFacade;
+import com.example.fitnessMarathonBot.botapi.client.teleframUserFacade.TelegramUserFacade;
 import lombok.Getter;
 import lombok.Setter;
 import org.springframework.boot.context.properties.ConfigurationProperties;
@@ -22,8 +23,8 @@ public class BotConfig {
     private String botToken;
 
     @Bean
-    public Bot myBot(TelegramFacade telegramFacade) throws TelegramApiRequestException {
-        Bot myBot = new Bot( telegramFacade);
+    public Bot myBot(TelegramUserFacade telegramUserFacade, TelegramAdminFacade telegramAdminFacade) throws TelegramApiRequestException {
+        Bot myBot = new Bot(telegramUserFacade, telegramAdminFacade);
         myBot.setBotUserName(botUserName);
         myBot.setBotToken(botToken);
         myBot.setWebHookPath(webHookPath);

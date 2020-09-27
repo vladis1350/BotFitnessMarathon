@@ -1,4 +1,4 @@
-package com.example.fitnessMarathonBot.botapi.plan;
+package com.example.fitnessMarathonBot.botapi.client.personalInformation;
 
 import com.example.fitnessMarathonBot.bean.UserProfileData;
 import com.example.fitnessMarathonBot.botapi.BotState;
@@ -8,11 +8,14 @@ import org.springframework.stereotype.Component;
 import org.telegram.telegrambots.meta.api.methods.send.SendMessage;
 import org.telegram.telegrambots.meta.api.objects.Message;
 
+/**
+ * @author has been inspired by Sergei Viacheslaev's work
+ */
 @Component
-public class PlanForToday implements InputMessageHandler {
+public class ShowProfileHandler implements InputMessageHandler {
     private UserDataCache userDataCache;
 
-    public PlanForToday(UserDataCache userDataCache) {
+    public ShowProfileHandler(UserDataCache userDataCache) {
         this.userDataCache = userDataCache;
     }
 
@@ -21,12 +24,15 @@ public class PlanForToday implements InputMessageHandler {
         final int userId = message.getFrom().getId();
         final UserProfileData profileData = userDataCache.getUserProfileData(userId);
 
-        userDataCache.setUsersCurrentBotState(userId, BotState.SHOW_PLAN_FOR_TODAY);
-        return new SendMessage(message.getChatId(), "План еще не составлен вашим тренером. Пожалуйста, ожидайте увежомления!");
+        userDataCache.setUsersCurrentBotState(userId, BotState.MY_INFORMATION);
+        return new SendMessage(message.getChatId(), String.format("%s%nИмя %s%nВозраст %s%nВес %s%nРост" +
+                        " %s%nТелосложение %s",
+                "Ваши данные", profileData.getName(), profileData.getAge(), profileData.getWeight(),
+                profileData.getHeight(), profileData.getPhysique()));
     }
 
     @Override
     public BotState getHandlerName() {
-        return BotState.PLAN_FOR_TODAY;
+        return BotState.MY_INFORMATION;
     }
 }

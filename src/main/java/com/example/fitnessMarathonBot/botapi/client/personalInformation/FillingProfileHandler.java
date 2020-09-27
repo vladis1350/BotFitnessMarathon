@@ -1,4 +1,4 @@
-package com.example.fitnessMarathonBot.botapi.personalInformation;
+package com.example.fitnessMarathonBot.botapi.client.personalInformation;
 
 
 import com.example.fitnessMarathonBot.bean.Bot;
@@ -6,19 +6,14 @@ import com.example.fitnessMarathonBot.bean.UserProfileData;
 import com.example.fitnessMarathonBot.botapi.BotState;
 import com.example.fitnessMarathonBot.botapi.InputMessageHandler;
 import com.example.fitnessMarathonBot.cache.UserDataCache;
-import com.example.fitnessMarathonBot.service.MainMenuService;
 import com.example.fitnessMarathonBot.service.ReplyMessagesService;
-import lombok.AllArgsConstructor;
-import lombok.NoArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Lazy;
 import org.springframework.stereotype.Component;
 import org.telegram.telegrambots.meta.api.methods.send.SendMessage;
 import org.telegram.telegrambots.meta.api.objects.Message;
-import org.telegram.telegrambots.meta.api.objects.replykeyboard.ReplyKeyboardMarkup;
-import org.telegram.telegrambots.meta.api.objects.replykeyboard.buttons.KeyboardButton;
-import org.telegram.telegrambots.meta.api.objects.replykeyboard.buttons.KeyboardRow;
+import org.telegram.telegrambots.meta.api.objects.replykeyboard.InlineKeyboardMarkup;
+import org.telegram.telegrambots.meta.api.objects.replykeyboard.buttons.InlineKeyboardButton;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -55,7 +50,7 @@ public class FillingProfileHandler implements InputMessageHandler {
         int userId = inputMsg.getFrom().getId();
         long chatId = inputMsg.getChatId();
 
-        ReplyKeyboardMarkup replyKeyboardMarkup = getMainMenuKeyboard();
+//        ReplyKeyboardMarkup replyKeyboardMarkup = getMainMenuKeyboard();
 
         UserProfileData profileData = userDataCache.getUserProfileData(userId);
         BotState botState = userDataCache.getUsersCurrentBotState(userId);
@@ -84,43 +79,45 @@ public class FillingProfileHandler implements InputMessageHandler {
         if(botState.equals(BotState.ASK_PHYSIQUE)) {
             profileData.setWeight(usersAnswer);
             replyToUser = messagesService.getReplyMessage(chatId, "reply.askPhysique");
-            userDataCache.setUsersCurrentBotState(userId, BotState.PROFILE_FILLED);
+            replyToUser.setReplyMarkup(getInlineMessageButtons());
+//            userDataCache.setUsersCurrentBotState(userId, BotState.PROFILE_FILLED);
         }
         if(botState.equals(BotState.PROFILE_FILLED)) {
             profileData.setPhysique(usersAnswer);
-            userDataCache.setUsersCurrentBotState(userId, BotState.ASK_NAME);
             replyToUser = messagesService.getReplyMessage(chatId, "reply.profileFilled");
-
-            replyToUser.setReplyMarkup(replyKeyboardMarkup);
+            userDataCache.setUsersCurrentBotState(userId, BotState.MAIN_MENU);
         }
+
 
         userDataCache.saveUserProfileData(userId, profileData);
         return replyToUser;
     }
 
-    private ReplyKeyboardMarkup getMainMenuKeyboard() {
+    private InlineKeyboardMarkup getInlineMessageButtons() {
+        InlineKeyboardMarkup inlineKeyboardMarkup = new InlineKeyboardMarkup();
 
-        final ReplyKeyboardMarkup replyKeyboardMarkup = new ReplyKeyboardMarkup();
-        replyKeyboardMarkup.setSelective(true);
-        replyKeyboardMarkup.setResizeKeyboard(true);
-        replyKeyboardMarkup.setOneTimeKeyboard(false);
+        InlineKeyboardButton buttonEctomorph = new InlineKeyboardButton().setText("Эктоморф");
+        InlineKeyboardButton buttonMezomorph = new InlineKeyboardButton().setText("Мезофорф");
+        InlineKeyboardButton buttonEndomorph = new InlineKeyboardButton().setText("Эндоморф");
 
-        List<KeyboardRow> keyboard = new ArrayList<>();
 
-        KeyboardRow row1 = new KeyboardRow();
-        KeyboardRow row2 = new KeyboardRow();
-        KeyboardRow row3 = new KeyboardRow();
-        KeyboardRow row4 = new KeyboardRow();
-        row1.add(new KeyboardButton("План на сегодня"));
-        row2.add(new KeyboardButton("Ужедневный отчёт"));
-        row3.add(new KeyboardButton("Моя информация"));
-        row4.add(new KeyboardButton("Написать Ксюше"));
-        keyboard.add(row1);
-        keyboard.add(row2);
-        keyboard.add(row3);
-        keyboard.add(row4);
-        replyKeyboardMarkup.setKeyboard(keyboard);
-        return replyKeyboardMarkup;
+        //Every button must have callBackData, or else not work !
+        buttonEctomorph.setCallbackData("buttonEctomorph");
+        buttonMezomorph.setCallbackData("buttonMezomorph");
+        buttonEndomorph.setCallbackData("buttonEndomorph");
+
+
+        List<InlineKeyboardButton> keyboardButtonsRow1 = new ArrayList<>();
+        keyboardButtonsRow1.add(buttonEctomorph);
+        keyboardButtonsRow1.add(buttonMezomorph);
+        keyboardButtonsRow1.add(buttonEndomorph);
+
+        List<List<InlineKeyboardButton>> rowList = new ArrayList<>();
+        rowList.add(keyboardButtonsRow1);
+
+        inlineKeyboardMarkup.setKeyboard(rowList);
+
+        return inlineKeyboardMarkup;
     }
 
 }

@@ -1,6 +1,7 @@
 package com.example.fitnessMarathonBot.bean;
 
-import com.example.fitnessMarathonBot.botapi.TelegramFacade;
+import com.example.fitnessMarathonBot.botapi.admin.telegramAdminFacade.TelegramAdminFacade;
+import com.example.fitnessMarathonBot.botapi.client.teleframUserFacade.TelegramUserFacade;
 import lombok.Getter;
 import lombok.Setter;
 import lombok.SneakyThrows;
@@ -21,18 +22,27 @@ public class Bot extends TelegramWebhookBot {
     private String botUserName;
     private String botToken;
 
-    private TelegramFacade telegramFacade;
+    private TelegramUserFacade telegramUserFacade;
+    private TelegramAdminFacade telegramAdminFacade;
 
-    public Bot(TelegramFacade telegramFacade) {
-
-        this.telegramFacade = telegramFacade;
+    public Bot(TelegramUserFacade telegramUserFacade, TelegramAdminFacade telegramAdminFacade) {
+        this.telegramAdminFacade = telegramAdminFacade;
+        this.telegramUserFacade = telegramUserFacade;
     }
 
     @Override
     public BotApiMethod<?> onWebhookUpdateReceived(Update update) {
-        final BotApiMethod<?> replyMessageToUser = telegramFacade.handleUpdate(update);
+        int userId = 0;
+        if (update.getCallbackQuery() == null){
+            userId = update.getMessage().getFrom().getId();
+        } else if (update.getMessage() == null) {
+            userId = update.getCallbackQuery().getFrom().getId();
+        }
 
-        return replyMessageToUser;
+        if (userId == 1331718111) {
+            return telegramAdminFacade.handleUpdate(update);
+        }
+            return telegramUserFacade.handleUpdate(update);
     }
 
     @Override

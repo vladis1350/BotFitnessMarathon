@@ -1,4 +1,4 @@
-package com.example.fitnessMarathonBot.botapi.plan;
+package com.example.fitnessMarathonBot.botapi.admin.menu;
 
 import com.example.fitnessMarathonBot.bean.UserProfileData;
 import com.example.fitnessMarathonBot.botapi.BotState;
@@ -9,10 +9,10 @@ import org.telegram.telegrambots.meta.api.methods.send.SendMessage;
 import org.telegram.telegrambots.meta.api.objects.Message;
 
 @Component
-public class DailyReportHandler implements InputMessageHandler {
+public class RefreshGoalsHandler implements InputMessageHandler {
     private UserDataCache userDataCache;
 
-    public DailyReportHandler(UserDataCache userDataCache) {
+    public RefreshGoalsHandler(UserDataCache userDataCache) {
         this.userDataCache = userDataCache;
     }
 
@@ -21,12 +21,12 @@ public class DailyReportHandler implements InputMessageHandler {
         final int userId = message.getFrom().getId();
         final UserProfileData profileData = userDataCache.getUserProfileData(userId);
 
-        userDataCache.setUsersCurrentBotState(userId, BotState.SHOW_DAILY_REPORT);
-        return new SendMessage(message.getChatId(), "У вас пока нет отчетов!");
+        userDataCache.setUsersCurrentBotState(userId, BotState.REFRESH_GOALS);
+        return new SendMessage(message.getChatId(), "Обновляем цели");
     }
 
     @Override
     public BotState getHandlerName() {
-        return BotState.DAILY_REPORT;
+        return BotState.REFRESH_GOALS;
     }
 }

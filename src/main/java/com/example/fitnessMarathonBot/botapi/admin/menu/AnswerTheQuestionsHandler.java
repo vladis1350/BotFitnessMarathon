@@ -1,4 +1,4 @@
-package com.example.fitnessMarathonBot.botapi.chat;
+package com.example.fitnessMarathonBot.botapi.admin.menu;
 
 import com.example.fitnessMarathonBot.bean.UserProfileData;
 import com.example.fitnessMarathonBot.botapi.BotState;
@@ -9,10 +9,10 @@ import org.telegram.telegrambots.meta.api.methods.send.SendMessage;
 import org.telegram.telegrambots.meta.api.objects.Message;
 
 @Component
-public class ShowChatHandler implements InputMessageHandler {
+public class AnswerTheQuestionsHandler implements InputMessageHandler {
     private UserDataCache userDataCache;
 
-    public ShowChatHandler(UserDataCache userDataCache) {
+    public AnswerTheQuestionsHandler(UserDataCache userDataCache) {
         this.userDataCache = userDataCache;
     }
 
@@ -21,12 +21,12 @@ public class ShowChatHandler implements InputMessageHandler {
         final int userId = message.getFrom().getId();
         final UserProfileData profileData = userDataCache.getUserProfileData(userId);
 
-        userDataCache.setUsersCurrentBotState(userId, BotState.SHOW_CHAT_WITH_MANAGER);
-        return new SendMessage(message.getChatId(), "Ожидайте ответ от тренера!");
+        userDataCache.setUsersCurrentBotState(userId, BotState.ANSWER_THE_QUESTIONS);
+        return new SendMessage(message.getChatId(), "К вам пока нет не каких вопросов");
     }
 
     @Override
     public BotState getHandlerName() {
-        return BotState.WRITE_TO_MANAGER;
+        return BotState.ANSWER_THE_QUESTIONS;
     }
 }

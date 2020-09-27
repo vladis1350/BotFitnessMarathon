@@ -15,17 +15,17 @@ import java.util.List;
  * @author has been inspired by Sergei Viacheslaev's project
  */
 @Service
-public class MainMenuService {
+public class UserMainMenuService {
 
-    public SendMessage getMainMenuMessage(final long chatId, final String textMessage) {
-        final ReplyKeyboardMarkup replyKeyboardMarkup = getMainMenuKeyboard();
+    public SendMessage getUserMainMenuMessage(final long chatId, final String textMessage) {
+        final ReplyKeyboardMarkup replyKeyboardMarkup = getUserMainMenuKeyboard();
         final SendMessage mainMenuMessage =
                 createMessageWithKeyboard(chatId, textMessage, replyKeyboardMarkup);
 
         return mainMenuMessage;
     }
 
-    private ReplyKeyboardMarkup getMainMenuKeyboard() {
+    private ReplyKeyboardMarkup getUserMainMenuKeyboard() {
 
         final ReplyKeyboardMarkup replyKeyboardMarkup = new ReplyKeyboardMarkup();
         replyKeyboardMarkup.setSelective(true);
@@ -39,7 +39,7 @@ public class MainMenuService {
         KeyboardRow row3 = new KeyboardRow();
         KeyboardRow row4 = new KeyboardRow();
         row1.add(new KeyboardButton("План на сегодня"));
-        row2.add(new KeyboardButton("Ужедневный отчёт"));
+        row2.add(new KeyboardButton("Ежедневный отчёт"));
         row3.add(new KeyboardButton("Моя информация"));
         row4.add(new KeyboardButton("Написать Ксюше"));
         keyboard.add(row1);
