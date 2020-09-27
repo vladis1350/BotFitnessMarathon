@@ -12,10 +12,10 @@ import lombok.experimental.FieldDefaults;
 @FieldDefaults(level = AccessLevel.PRIVATE)
 public class UserProfileData {
     String name;
-    String height;
-    String weight;
+    int height;
+    int weight;
+    int age;
     String physique;
-    String age;
 
     @Override
     public String toString() {

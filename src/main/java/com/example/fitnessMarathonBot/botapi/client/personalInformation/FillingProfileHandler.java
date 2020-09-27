@@ -26,7 +26,7 @@ public class FillingProfileHandler implements InputMessageHandler {
     private Bot myBot;
 
     public FillingProfileHandler(UserDataCache userDataCache,
-                               ReplyMessagesService messagesService, @Lazy Bot myBot) {
+                                 ReplyMessagesService messagesService, @Lazy Bot myBot) {
         this.userDataCache = userDataCache;
         this.messagesService = messagesService;
         this.myBot = myBot;
@@ -37,6 +37,7 @@ public class FillingProfileHandler implements InputMessageHandler {
         if (userDataCache.getUsersCurrentBotState(message.getFrom().getId()).equals(BotState.ASK_PERSONAL_INFO)) {
             userDataCache.setUsersCurrentBotState(message.getFrom().getId(), BotState.ASK_NAME);
         }
+
         return processUsersInput(message);
     }
 
@@ -57,32 +58,44 @@ public class FillingProfileHandler implements InputMessageHandler {
 
         SendMessage replyToUser = null;
 
-        if (botState.equals(BotState.ASK_NAME)) {
-            replyToUser = messagesService.getReplyMessage(chatId, "reply.askName");
-            userDataCache.setUsersCurrentBotState(userId, BotState.ASK_AGE);
-        }
-        if(botState.equals(BotState.ASK_AGE)) {
+        if (botState.equals(BotState.ASK_AGE)) {
+            System.out.println(usersAnswer);
             profileData.setName(usersAnswer);
             replyToUser = messagesService.getReplyMessage(chatId, "reply.askAge");
             userDataCache.setUsersCurrentBotState(userId, BotState.ASK_HEIGHT);
         }
-        if(botState.equals(BotState.ASK_HEIGHT)) {
-            profileData.setAge(usersAnswer);
-            replyToUser = messagesService.getReplyMessage(chatId, "reply.askHeight");
-            userDataCache.setUsersCurrentBotState(userId, BotState.ASK_WEIGHT);
+        if (botState.equals(BotState.ASK_HEIGHT)) {
+            if (userAnswerIsCorrect(usersAnswer)) {
+                profileData.setAge(Integer.parseInt(usersAnswer));
+                replyToUser = messagesService.getReplyMessage(chatId, "reply.askHeight");
+                userDataCache.setUsersCurrentBotState(userId, BotState.ASK_WEIGHT);
+            } else {
+                replyToUser = messagesService.getReplyMessage(chatId, "reply.askAge");
+                userDataCache.setUsersCurrentBotState(userId, BotState.ASK_HEIGHT);
+            }
         }
-        if(botState.equals(BotState.ASK_WEIGHT)) {
-            profileData.setHeight(usersAnswer);
-            replyToUser = messagesService.getReplyMessage(chatId, "reply.askWeight");
-            userDataCache.setUsersCurrentBotState(userId, BotState.ASK_PHYSIQUE);
+        if (botState.equals(BotState.ASK_WEIGHT)) {
+            if (userAnswerIsCorrect(usersAnswer)) {
+                profileData.setHeight(Integer.parseInt(usersAnswer));
+                replyToUser = messagesService.getReplyMessage(chatId, "reply.askWeight");
+                userDataCache.setUsersCurrentBotState(userId, BotState.ASK_PHYSIQUE);
+            } else {
+                replyToUser = messagesService.getReplyMessage(chatId, "reply.askHeight");
+                userDataCache.setUsersCurrentBotState(userId, BotState.ASK_WEIGHT);
+            }
         }
-        if(botState.equals(BotState.ASK_PHYSIQUE)) {
-            profileData.setWeight(usersAnswer);
-            replyToUser = messagesService.getReplyMessage(chatId, "reply.askPhysique");
-            replyToUser.setReplyMarkup(getInlineMessageButtons());
-//            userDataCache.setUsersCurrentBotState(userId, BotState.PROFILE_FILLED);
+        if (botState.equals(BotState.ASK_PHYSIQUE)) {
+            if (userAnswerIsCorrect(usersAnswer)) {
+                profileData.setWeight(Integer.parseInt(usersAnswer));
+                replyToUser = messagesService.getReplyMessage(chatId, "reply.askPhysique");
+                replyToUser.setReplyMarkup(getInlineMessageButtons());
+                userDataCache.setUsersCurrentBotState(userId, BotState.PROFILE_FILLED);
+            } else {
+                replyToUser = messagesService.getReplyMessage(chatId, "reply.askWeight");
+                userDataCache.setUsersCurrentBotState(userId, BotState.ASK_PHYSIQUE);
+            }
         }
-        if(botState.equals(BotState.PROFILE_FILLED)) {
+        if (botState.equals(BotState.PROFILE_FILLED)) {
             profileData.setPhysique(usersAnswer);
             replyToUser = messagesService.getReplyMessage(chatId, "reply.profileFilled");
             userDataCache.setUsersCurrentBotState(userId, BotState.MAIN_MENU);
@@ -91,6 +104,10 @@ public class FillingProfileHandler implements InputMessageHandler {
 
         userDataCache.saveUserProfileData(userId, profileData);
         return replyToUser;
+    }
+
+    private boolean userAnswerIsCorrect(String userAnswer) {
+        return userAnswer.matches("[-+]?\\d+");
     }
 
     private InlineKeyboardMarkup getInlineMessageButtons() {
