@@ -38,10 +38,10 @@ public class UserMainMenuService {
         KeyboardRow row2 = new KeyboardRow();
         KeyboardRow row3 = new KeyboardRow();
         KeyboardRow row4 = new KeyboardRow();
-        row1.add(new KeyboardButton("План на сегодня"));
-        row2.add(new KeyboardButton("Ежедневный отчёт"));
+        row1.add(new KeyboardButton("Задание"));
+        row2.add(new KeyboardButton("Отчёт"));
         row3.add(new KeyboardButton("Моя информация"));
-        row4.add(new KeyboardButton("Написать Ксюше"));
+        row4.add(new KeyboardButton("Ссылка на чат"));
         keyboard.add(row1);
         keyboard.add(row2);
         keyboard.add(row3);

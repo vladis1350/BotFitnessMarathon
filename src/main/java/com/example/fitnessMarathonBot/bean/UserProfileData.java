@@ -3,6 +3,7 @@ package com.example.fitnessMarathonBot.bean;
 import lombok.AccessLevel;
 import lombok.Data;
 import lombok.experimental.FieldDefaults;
+import org.springframework.stereotype.Component;
 
 /**
  * Данные анкеты пользователя
@@ -10,17 +11,27 @@ import lombok.experimental.FieldDefaults;
 
 @Data
 @FieldDefaults(level = AccessLevel.PRIVATE)
+@Component
 public class UserProfileData {
     String name;
     int height;
-    int weight;
+    double weight;
     int age;
-    String physique;
+    String date;
+    double neck;
+    double arm;
+    double chest;
+    double waist;
+    double belly;
+    double thighs;
+    double thigh;
+    double shin;
 
     @Override
     public String toString() {
-        return String.format("%s%nИмя %s%nВозраст %s%nВес %s%nРост" +
-                        " %s%nТелосложение %s",
-                "Данные по вашему заказу", getName(), getAge(), getWeight(), getHeight(), getPhysique());
+        return String.format("%s%nИмя:  %s%nВозраст:  %s%nВес:  %s%nРост:  %s%nШея:  %s%nРука:  %s%nГрудь:  " +
+                        "%s%nТалия:  %s%nЖивот:  %s%nБёдра:  %s%nБедро:  %s%nГолень:  %s%nДата заполнения:  %s",
+                "Данные по вашему заказу", getName(), getAge(), getWeight(), getHeight(), getNeck(), getArm(),
+                getChest(), getWeight(), getBelly(), getThighs(), getThigh(), getShin(), getDate());
     }
 }

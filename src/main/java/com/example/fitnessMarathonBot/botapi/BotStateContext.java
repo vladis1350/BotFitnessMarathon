@@ -39,6 +39,15 @@ public class BotStateContext {
             case ASK_WEIGHT:
             case ASK_PHYSIQUE:
             case ASK_AGE:
+            case ASK_BELLY:
+            case ASK_CHEST:
+            case ASK_THIGHS:
+            case ASK_THIGH:
+            case ASK_ARM:
+            case ASK_NECK:
+            case ASK_SHIN:
+            case ASK_DATE:
+            case ASK_WAIST:
             case ASK_PERSONAL_INFO:
             case PROFILE_FILLED:
                 return true;

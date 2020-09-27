@@ -9,10 +9,10 @@ import org.telegram.telegrambots.meta.api.methods.send.SendMessage;
 import org.telegram.telegrambots.meta.api.objects.Message;
 
 @Component
-public class PlanForToday implements InputMessageHandler {
+public class TaskHandler implements InputMessageHandler {
     private UserDataCache userDataCache;
 
-    public PlanForToday(UserDataCache userDataCache) {
+    public TaskHandler(UserDataCache userDataCache) {
         this.userDataCache = userDataCache;
     }
 
@@ -21,12 +21,12 @@ public class PlanForToday implements InputMessageHandler {
         final int userId = message.getFrom().getId();
         final UserProfileData profileData = userDataCache.getUserProfileData(userId);
 
-        userDataCache.setUsersCurrentBotState(userId, BotState.PLAN_FOR_TODAY);
+        userDataCache.setUsersCurrentBotState(userId, BotState.TASK);
         return new SendMessage(message.getChatId(), "План еще не составлен вашим тренером. Пожалуйста, ожидайте уведомления!");
     }
 
     @Override
     public BotState getHandlerName() {
-        return BotState.PLAN_FOR_TODAY;
+        return BotState.TASK;
     }
 }

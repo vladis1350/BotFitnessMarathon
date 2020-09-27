@@ -21,12 +21,12 @@ public class ShowChatHandler implements InputMessageHandler {
         final int userId = message.getFrom().getId();
         final UserProfileData profileData = userDataCache.getUserProfileData(userId);
 
-        userDataCache.setUsersCurrentBotState(userId, BotState.SHOW_CHAT_WITH_MANAGER);
+        userDataCache.setUsersCurrentBotState(userId, BotState.LINK_TO_CHAT);
         return new SendMessage(message.getChatId(), "Напишите ваше сообщение!");
     }
 
     @Override
     public BotState getHandlerName() {
-        return BotState.WRITE_TO_MANAGER;
+        return BotState.LINK_TO_CHAT;
     }
 }

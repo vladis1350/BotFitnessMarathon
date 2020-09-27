@@ -85,18 +85,18 @@ public class TelegramUserFacade {
             case "Ввод антропометрических данных":
                 botState = BotState.ASK_PERSONAL_INFO;
                 break;
-            case "План на сегодня":
-                botState = BotState.PLAN_FOR_TODAY;
+            case "Задание":
+                botState = BotState.TASK;
                 break;
-            case "Ежедневный отчёт":
+            case "Отчёт":
                 botState = BotState.REPORT_OF_THE_DAY;
                 break;
             case "Моя информация":
 //                myBot.sendDocument(chatId, "Ваши данные", getUsersProfile(userId));
                 botState = BotState.MY_INFORMATION;
                 break;
-            case "Написать Ксюше":
-                botState = BotState.WRITE_TO_MANAGER;
+            case "Ссылка на чат":
+                botState = BotState.LINK_TO_CHAT;
                 break;
             default:
                 botState = userDataCache.getUsersCurrentBotState(userId);
@@ -116,23 +116,24 @@ public class TelegramUserFacade {
         LocaleMessageService localeMessageService;
         BotApiMethod<?> callBackAnswer = userMainMenuService.getUserMainMenuMessage(chatId, "Профиль успешно заполнен, свои данные вы можете просмотреть в разделе главного меню \"Моя информация\" \nВоспользуйтесь главным меню");
 
-        if (buttonQuery.getData().equals("buttonEctomorph")) {
-            UserProfileData userProfileData = userDataCache.getUserProfileData(userId);
-            userProfileData.setPhysique("Эктоморф");
-            userDataCache.saveUserProfileData(userId, userProfileData);
-
-            userDataCache.setUsersCurrentBotState(userId, BotState.PROFILE_FILLED);
-        } else if (buttonQuery.getData().equals("buttonMezomorph")) {
-            UserProfileData userProfileData = userDataCache.getUserProfileData(userId);
-            userProfileData.setPhysique("Мезоморф");
-            userDataCache.saveUserProfileData(userId, userProfileData);
-            userDataCache.setUsersCurrentBotState(userId, BotState.PROFILE_FILLED);
-        } else if (buttonQuery.getData().equals("buttonEndomorph")) {
-            UserProfileData userProfileData = userDataCache.getUserProfileData(userId);
-            userProfileData.setPhysique("Эндоморф");
-            userDataCache.saveUserProfileData(userId, userProfileData);
-            userDataCache.setUsersCurrentBotState(userId, BotState.PROFILE_FILLED);
-        } else if (buttonQuery.getData().equals("buttonInputPersonalInfo")){
+//        if (buttonQuery.getData().equals("buttonEctomorph")) {
+//            UserProfileData userProfileData = userDataCache.getUserProfileData(userId);
+//            userProfileData.setPhysique("Эктоморф");
+//            userDataCache.saveUserProfileData(userId, userProfileData);
+//
+//            userDataCache.setUsersCurrentBotState(userId, BotState.PROFILE_FILLED);
+//        } else if (buttonQuery.getData().equals("buttonMezomorph")) {
+//            UserProfileData userProfileData = userDataCache.getUserProfileData(userId);
+//            userProfileData.setPhysique("Мезоморф");
+//            userDataCache.saveUserProfileData(userId, userProfileData);
+//            userDataCache.setUsersCurrentBotState(userId, BotState.PROFILE_FILLED);
+//        } else if (buttonQuery.getData().equals("buttonEndomorph")) {
+//            UserProfileData userProfileData = userDataCache.getUserProfileData(userId);
+//            userProfileData.setPhysique("Эндоморф");
+//            userDataCache.saveUserProfileData(userId, userProfileData);
+//            userDataCache.setUsersCurrentBotState(userId, BotState.PROFILE_FILLED);
+//        } else
+            if (buttonQuery.getData().equals("buttonInputPersonalInfo")){
             callBackAnswer = new SendMessage(chatId, "Как вас зовут?");
             userDataCache.setUsersCurrentBotState(userId, BotState.ASK_AGE);
         }

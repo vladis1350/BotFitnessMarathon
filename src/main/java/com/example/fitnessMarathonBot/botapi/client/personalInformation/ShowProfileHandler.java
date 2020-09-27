@@ -14,6 +14,7 @@ import org.telegram.telegrambots.meta.api.objects.Message;
 @Component
 public class ShowProfileHandler implements InputMessageHandler {
     private UserDataCache userDataCache;
+//    private UserProfileData userProfileData;
 
     public ShowProfileHandler(UserDataCache userDataCache) {
         this.userDataCache = userDataCache;
@@ -25,10 +26,7 @@ public class ShowProfileHandler implements InputMessageHandler {
         final UserProfileData profileData = userDataCache.getUserProfileData(userId);
 
         userDataCache.setUsersCurrentBotState(userId, BotState.MY_INFORMATION);
-        return new SendMessage(message.getChatId(), String.format("%s%nИмя %s%nВозраст %s%nВес %s%nРост" +
-                        " %s%nТелосложение %s",
-                "Ваши данные", profileData.getName(), profileData.getAge(), profileData.getWeight(),
-                profileData.getHeight(), profileData.getPhysique()));
+        return new SendMessage(message.getChatId(), profileData.toString());
     }
 
     @Override
