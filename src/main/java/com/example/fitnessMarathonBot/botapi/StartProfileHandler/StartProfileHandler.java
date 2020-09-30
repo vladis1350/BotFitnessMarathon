@@ -5,6 +5,7 @@ import com.example.fitnessMarathonBot.botapi.InputMessageHandler;
 import com.example.fitnessMarathonBot.cache.UserDataCache;
 import com.example.fitnessMarathonBot.service.AdminMainMenuService;
 import com.example.fitnessMarathonBot.service.ReplyMessagesService;
+import com.example.fitnessMarathonBot.utils.Emojis;
 import lombok.Getter;
 import lombok.Setter;
 import org.springframework.stereotype.Component;
@@ -42,13 +43,15 @@ public class StartProfileHandler implements InputMessageHandler {
     }
 
     private SendMessage processUsersInput(Message inputMsg) {
+        String message = "";
         int userId = inputMsg.getFrom().getId();
         long chatId = inputMsg.getChatId();
         SendMessage replyToUser = null;
         if (userId == 1331718111) {
             replyToUser = adminMainMenuService.getAdminMainMenuMessage(chatId, "Привет! я FitnessMarathonBot - твой помощник в твем не легком деле. Используй главное меню что бы начать работу. Действуй!!! =)");
         } else {
-            replyToUser = messagesService.getReplyMessage(chatId, "reply.askStart");
+            message = String.format(messagesService.getReplyText("reply.askStart"), Emojis.POINT_RIGHT, Emojis.TADA, Emojis.TADA);
+            replyToUser = new SendMessage(chatId, message);
             replyToUser.setReplyMarkup(getInlineMessageButtons());
         }
 
