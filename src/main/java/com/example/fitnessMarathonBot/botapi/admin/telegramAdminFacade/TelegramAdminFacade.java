@@ -78,16 +78,22 @@ public class TelegramAdminFacade {
             case "/start":
                 botState = BotState.ASK_START;
                 break;
-            case "Просмотреть участников и результаты марафона":
+            case "Клиенты":
                 botState = BotState.VIEW_PARTICIPANTS_ADN_RESULTS;
                 break;
-            case "Начать новый марафон":
+            case "Начать марафон":
                 botState = BotState.START_NEW_MARATHON;
                 break;
-            case "Обновить цели":
+            case "Задания":
                 botState = BotState.REFRESH_GOALS;
                 break;
-            case "Ответить на вопросы":
+            case "План питания":
+                botState = BotState.MEAL_PLAN;
+                break;
+            case "Недельный отчёт":
+                botState = BotState.WEEKLY_REPORT;
+                break;
+            case "Отправить сообщение всем":
                 botState = BotState.ANSWER_THE_QUESTIONS;
                 break;
             default:

@@ -33,14 +33,20 @@ public class AdminMainMenuService {
         KeyboardRow row2 = new KeyboardRow();
         KeyboardRow row3 = new KeyboardRow();
         KeyboardRow row4 = new KeyboardRow();
-        row1.add(new KeyboardButton("Просмотреть участников и результаты марафона"));
-        row2.add(new KeyboardButton("Начать новый марафон"));
-        row3.add(new KeyboardButton("Обновить цели"));
-        row4.add(new KeyboardButton("Ответить на вопросы"));
+        KeyboardRow row5 = new KeyboardRow();
+        KeyboardRow row6 = new KeyboardRow();
+        row1.add(new KeyboardButton("Отправить сообщение всем"));
+        row2.add(new KeyboardButton("Клиенты"));
+        row3.add(new KeyboardButton("Начать марафон"));
+        row4.add(new KeyboardButton("Недельный отчёт"));
+        row5.add(new KeyboardButton("План питания"));
+        row6.add(new KeyboardButton("Задания"));
         keyboard.add(row1);
         keyboard.add(row2);
         keyboard.add(row3);
         keyboard.add(row4);
+        keyboard.add(row5);
+        keyboard.add(row6);
         replyKeyboardMarkup.setKeyboard(keyboard);
         return replyKeyboardMarkup;
     }

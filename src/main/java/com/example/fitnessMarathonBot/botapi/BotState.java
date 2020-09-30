@@ -13,6 +13,8 @@ public enum BotState {
     ASK_AGE,
     ASK_NAME,
     ASK_ARM,
+    MEAL_PLAN,
+    WEEKLY_REPORT,
     ASK_SHIN,
     ASK_BELLY,
     ASK_CHEST,

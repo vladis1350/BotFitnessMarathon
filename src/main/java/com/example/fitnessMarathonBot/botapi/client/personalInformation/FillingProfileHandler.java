@@ -73,7 +73,7 @@ public class FillingProfileHandler implements InputMessageHandler {
         }
         if (botState.equals(BotState.ASK_HEIGHT)) {
             if (userAnswerIsCorrect(usersAnswer)) {
-                profileData.setAge(Integer.parseInt(usersAnswer));
+                profileData.setAge(usersAnswer);
                 replyToUser = messagesService.getReplyMessage(chatId, "reply.askHeight");
                 userDataCache.setUsersCurrentBotState(userId, BotState.ASK_WEIGHT);
             } else {
@@ -83,7 +83,7 @@ public class FillingProfileHandler implements InputMessageHandler {
         }
         if (botState.equals(BotState.ASK_WEIGHT)) {
             if (userAnswerIsCorrect(usersAnswer)) {
-                profileData.setHeight(Integer.parseInt(usersAnswer));
+                profileData.setHeight(Double.parseDouble(usersAnswer));
                 replyToUser = messagesService.getReplyMessage(chatId, "reply.askWeight");
                 userDataCache.setUsersCurrentBotState(userId, BotState.ASK_NECK);
             } else {
@@ -203,7 +203,6 @@ public class FillingProfileHandler implements InputMessageHandler {
         InlineKeyboardButton buttonEctomorph = new InlineKeyboardButton().setText("Эктоморф");
         InlineKeyboardButton buttonMezomorph = new InlineKeyboardButton().setText("Мезофорф");
         InlineKeyboardButton buttonEndomorph = new InlineKeyboardButton().setText("Эндоморф");
-
 
         //Every button must have callBackData, or else not work !
         buttonEctomorph.setCallbackData("buttonEctomorph");

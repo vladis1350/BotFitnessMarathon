@@ -9,10 +9,15 @@ import org.springframework.util.ResourceUtils;
 import org.telegram.telegrambots.bots.TelegramWebhookBot;
 import org.telegram.telegrambots.meta.api.methods.BotApiMethod;
 import org.telegram.telegrambots.meta.api.methods.send.SendDocument;
+import org.telegram.telegrambots.meta.api.methods.send.SendMediaGroup;
+import org.telegram.telegrambots.meta.api.methods.send.SendMessage;
 import org.telegram.telegrambots.meta.api.methods.send.SendPhoto;
+import org.telegram.telegrambots.meta.api.objects.Message;
 import org.telegram.telegrambots.meta.api.objects.Update;
 
 import java.io.File;
+import java.util.ArrayList;
+import java.util.List;
 
 
 @Getter
@@ -87,5 +92,21 @@ public class Bot extends TelegramWebhookBot {
         sendDocument.setCaption(caption);
         sendDocument.setDocument(sendFile);
         execute(sendDocument);
+    }
+
+    @SneakyThrows
+    public void sendListMessages(List<SendMessage> sendMessageList) {
+        for (SendMessage message: sendMessageList) {
+            execute(message);
+            Thread.sleep(10000);
+        }
+    }
+
+    @SneakyThrows
+    public void sendMessageAllParticipantMarathon(List<SendMessage> sendMessageList) {
+        for (SendMessage message: sendMessageList) {
+            execute(message);
+            Thread.sleep(10000);
+        }
     }
 }

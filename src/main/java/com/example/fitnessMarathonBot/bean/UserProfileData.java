@@ -14,9 +14,9 @@ import org.springframework.stereotype.Component;
 @Component
 public class UserProfileData {
     String name;
-    int height;
+    double height;
     double weight;
-    int age;
+    String age;
     String date;
     double neck;
     double arm;
@@ -29,9 +29,9 @@ public class UserProfileData {
 
     @Override
     public String toString() {
-        return String.format("%s%nИмя:  %s%nВозраст:  %s%nВес:  %s%nРост:  %s%nШея:  %s%nРука:  %s%nГрудь:  " +
+        return String.format("%s%nФИО:  %s%nВозраст:  %s%nВес:  %s%nРост:  %s%nШея:  %s%nРука:  %s%nГрудь:  " +
                         "%s%nТалия:  %s%nЖивот:  %s%nБёдра:  %s%nБедро:  %s%nГолень:  %s%nДата заполнения:  %s",
-                "Данные по вашему заказу", getName(), getAge(), getWeight(), getHeight(), getNeck(), getArm(),
+                "Ваши данные: ", getName(), getAge(), getWeight(), getHeight(), getNeck(), getArm(),
                 getChest(), getWeight(), getBelly(), getThighs(), getThigh(), getShin(), getDate());
     }
 }
