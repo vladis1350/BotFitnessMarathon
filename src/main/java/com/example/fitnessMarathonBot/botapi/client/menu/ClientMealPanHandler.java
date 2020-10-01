@@ -1,4 +1,4 @@
-package com.example.fitnessMarathonBot.botapi.admin.menu;
+package com.example.fitnessMarathonBot.botapi.client.menu;
 
 import com.example.fitnessMarathonBot.bean.UserProfileData;
 import com.example.fitnessMarathonBot.botapi.BotState;
@@ -9,10 +9,10 @@ import org.telegram.telegrambots.meta.api.methods.send.SendMessage;
 import org.telegram.telegrambots.meta.api.objects.Message;
 
 @Component
-public class MealPlanHandler implements InputMessageHandler {
+public class ClientMealPanHandler implements InputMessageHandler {
     private UserDataCache userDataCache;
 
-    public MealPlanHandler(UserDataCache userDataCache) {
+    public ClientMealPanHandler(UserDataCache userDataCache) {
         this.userDataCache = userDataCache;
     }
 
@@ -21,12 +21,14 @@ public class MealPlanHandler implements InputMessageHandler {
         final int userId = message.getFrom().getId();
         final UserProfileData profileData = userDataCache.getUserProfileData(userId);
 
-        userDataCache.setUsersCurrentBotState(userId, BotState.MEAL_PLAN);
-        return new SendMessage(message.getChatId(), "Здесь будут составляться планы питания");
+        userDataCache.setUsersCurrentBotState(userId, BotState.CLIENT_MEAL_PLAN);
+        return new SendMessage(message.getChatId(), "План питания для вас на три дня: \n" +
+                "\n" +
+                " Кушай кашу на обед укрепляй иммунитет!");
     }
 
     @Override
     public BotState getHandlerName() {
-        return BotState.MEAL_PLAN;
+        return BotState.CLIENT_MEAL_PLAN;
     }
 }

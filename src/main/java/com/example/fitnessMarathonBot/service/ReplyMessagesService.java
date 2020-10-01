@@ -29,6 +29,6 @@ public class ReplyMessagesService {
     }
 
     public String getReplyMessage(String replyText, Emojis emojis) {
-        return localeMessageService.getMessage(replyText, Emojis.ARROWDOWN);
+        return localeMessageService.getMessage(replyText, Emojis.ARROW_DOWN);
     }
 }

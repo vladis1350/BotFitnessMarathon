@@ -12,12 +12,13 @@ import org.telegram.telegrambots.meta.api.methods.send.SendDocument;
 import org.telegram.telegrambots.meta.api.methods.send.SendMediaGroup;
 import org.telegram.telegrambots.meta.api.methods.send.SendMessage;
 import org.telegram.telegrambots.meta.api.methods.send.SendPhoto;
-import org.telegram.telegrambots.meta.api.objects.Message;
 import org.telegram.telegrambots.meta.api.objects.Update;
 
 import java.io.File;
-import java.util.ArrayList;
+import java.net.URL;
+import java.util.LinkedHashMap;
 import java.util.List;
+import java.util.Map;
 
 
 @Getter
@@ -38,7 +39,7 @@ public class Bot extends TelegramWebhookBot {
     @Override
     public BotApiMethod<?> onWebhookUpdateReceived(Update update) {
         int userId = 0;
-        if (update.getCallbackQuery() == null){
+        if (update.getCallbackQuery() == null) {
             userId = update.getMessage().getFrom().getId();
         } else if (update.getMessage() == null) {
             userId = update.getCallbackQuery().getFrom().getId();
@@ -47,7 +48,7 @@ public class Bot extends TelegramWebhookBot {
         if (userId == 1331718111) {
             return telegramAdminFacade.handleUpdate(update);
         }
-            return telegramUserFacade.handleUpdate(update);
+        return telegramUserFacade.handleUpdate(update);
     }
 
     @Override
@@ -64,6 +65,7 @@ public class Bot extends TelegramWebhookBot {
     public String getBotPath() {
         return webHookPath;
     }
+
     public void setWebHookPath(String webHookPath) {
         this.webHookPath = webHookPath;
     }
@@ -78,11 +80,17 @@ public class Bot extends TelegramWebhookBot {
 
     @SneakyThrows
     public void sendPhoto(long chatId, String imageCaption, String imagePath) {
-        File image = ResourceUtils.getFile("classpath:" + imagePath);
+        URL url = ResourceUtils.getURL("classpath:static/images/" + imagePath + ".JPG");
+        File image = ResourceUtils.getFile(url);
         SendPhoto sendPhoto = new SendPhoto().setPhoto(image);
         sendPhoto.setChatId(chatId);
         sendPhoto.setCaption(imageCaption);
         execute(sendPhoto);
+    }
+
+    @SneakyThrows
+    public void sendAllStartingPhoto(long chatId, LinkedHashMap<String, String> photoInfo) {
+
     }
 
     @SneakyThrows
@@ -96,15 +104,29 @@ public class Bot extends TelegramWebhookBot {
 
     @SneakyThrows
     public void sendListMessages(List<SendMessage> sendMessageList) {
-        for (SendMessage message: sendMessageList) {
+        SendPhoto sendPhoto = new SendPhoto();
+        URL url = null;
+        File image = null;
+        for (SendMessage message : sendMessageList) {
             execute(message);
-            Thread.sleep(10000);
+            Thread.sleep( 1000);
         }
+    }
+
+
+    @SneakyThrows
+    public void sendClientMealPlan(long chatId) {
+        SendMessage clientMealPlan = new SendMessage();
+        clientMealPlan.setChatId(chatId);
+        clientMealPlan.setText("План питания для вас на три дня: \n\n" +
+                "Кушай кашу на обед укрепляй иммунитет!");
+        Thread.sleep(3000);
+        execute(clientMealPlan);
     }
 
     @SneakyThrows
     public void sendMessageAllParticipantMarathon(List<SendMessage> sendMessageList) {
-        for (SendMessage message: sendMessageList) {
+        for (SendMessage message : sendMessageList) {
             execute(message);
             Thread.sleep(10000);
         }

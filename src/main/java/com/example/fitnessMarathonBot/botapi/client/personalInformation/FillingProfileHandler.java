@@ -17,6 +17,7 @@ import org.telegram.telegrambots.meta.api.methods.send.SendMessage;
 import org.telegram.telegrambots.meta.api.objects.Message;
 import org.telegram.telegrambots.meta.api.objects.replykeyboard.InlineKeyboardMarkup;
 import org.telegram.telegrambots.meta.api.objects.replykeyboard.buttons.InlineKeyboardButton;
+import org.telegram.telegrambots.meta.exceptions.TelegramApiException;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -184,7 +185,14 @@ public class FillingProfileHandler implements InputMessageHandler {
         if (botState.equals(BotState.PROFILE_FILLED)) {
             profileData.setDate(usersAnswer);
 //            replyToUser = messagesService.getReplyMessage(chatId, "reply.profileFilled");
-            replyToUser = userMainMenuService.getUserMainMenuMessage(chatId, "Профиль успешно заполнен, свои данные вы можете просмотреть в разделе главного меню \"Моя информация\" \nВоспользуйтесь главным меню");
+//            replyToUser = userMainMenuService.getUserMainMenuMessage(chatId, messagesService.getReplyText("reply.profileFilled"));
+            try {
+                myBot.execute(new SendMessage(inputMsg.getChatId(), messagesService.getReplyText("reply.profileFilled"))
+                .setReplyMarkup(userMainMenuService.getUserMainMenuKeyboard()));
+            } catch (TelegramApiException e) {
+                e.printStackTrace();
+            }
+            myBot.sendClientMealPlan(inputMsg.getChatId());
             userDataCache.setUsersCurrentBotState(userId, BotState.MAIN_MENU);
         }
 

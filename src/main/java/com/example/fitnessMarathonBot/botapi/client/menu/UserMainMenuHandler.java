@@ -25,7 +25,7 @@ public class UserMainMenuHandler implements InputMessageHandler {
     public SendMessage handle(Message message) {
 
         userDataCache.setUsersCurrentBotState(message.getFrom().getId(), BotState.MAIN_MENU);
-        return userMainMenuService.getUserMainMenuMessage(message.getChatId(), messagesService.getReplyText("reply.ShowUserMainMenu"));
+        return userMainMenuService.getUserMainMenuMessage(message.getChatId());
     }
 
     @Override

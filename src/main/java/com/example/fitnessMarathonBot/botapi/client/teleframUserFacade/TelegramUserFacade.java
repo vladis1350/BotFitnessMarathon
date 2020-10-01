@@ -114,7 +114,7 @@ public class TelegramUserFacade {
         final long chatId = buttonQuery.getMessage().getChatId();
         final int userId = buttonQuery.getFrom().getId();
         LocaleMessageService localeMessageService;
-        BotApiMethod<?> callBackAnswer = userMainMenuService.getUserMainMenuMessage(chatId, "Профиль успешно заполнен, свои данные вы можете просмотреть в разделе главного меню \"Моя информация\" \nВоспользуйтесь главным меню");
+        BotApiMethod<?> callBackAnswer = userMainMenuService.getUserMainMenuMessage(chatId);
 
 //        if (buttonQuery.getData().equals("buttonEctomorph")) {
 //            UserProfileData userProfileData = userDataCache.getUserProfileData(userId);
@@ -134,7 +134,7 @@ public class TelegramUserFacade {
 //            userDataCache.setUsersCurrentBotState(userId, BotState.PROFILE_FILLED);
 //        } else
             if (buttonQuery.getData().equals("buttonInputPersonalInfo")){
-            callBackAnswer = new SendMessage(chatId, "Как вас зовут?");
+            callBackAnswer = new SendMessage(chatId, messagesService.getReplyText("reply.askName"));
             userDataCache.setUsersCurrentBotState(userId, BotState.ASK_AGE);
         }
 
