@@ -17,6 +17,7 @@ import org.telegram.telegrambots.meta.api.methods.send.SendMessage;
 import org.telegram.telegrambots.meta.api.objects.Message;
 import org.telegram.telegrambots.meta.api.objects.replykeyboard.InlineKeyboardMarkup;
 import org.telegram.telegrambots.meta.api.objects.replykeyboard.buttons.InlineKeyboardButton;
+import org.telegram.telegrambots.meta.exceptions.TelegramApiException;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -73,7 +74,7 @@ public class FillingProfileHandler implements InputMessageHandler {
         }
         if (botState.equals(BotState.ASK_HEIGHT)) {
             if (userAnswerIsCorrect(usersAnswer)) {
-                profileData.setAge(Integer.parseInt(usersAnswer));
+                profileData.setAge(usersAnswer);
                 replyToUser = messagesService.getReplyMessage(chatId, "reply.askHeight");
                 userDataCache.setUsersCurrentBotState(userId, BotState.ASK_WEIGHT);
             } else {
@@ -83,7 +84,7 @@ public class FillingProfileHandler implements InputMessageHandler {
         }
         if (botState.equals(BotState.ASK_WEIGHT)) {
             if (userAnswerIsCorrect(usersAnswer)) {
-                profileData.setHeight(Integer.parseInt(usersAnswer));
+                profileData.setHeight(Double.parseDouble(usersAnswer));
                 replyToUser = messagesService.getReplyMessage(chatId, "reply.askWeight");
                 userDataCache.setUsersCurrentBotState(userId, BotState.ASK_NECK);
             } else {
@@ -184,7 +185,14 @@ public class FillingProfileHandler implements InputMessageHandler {
         if (botState.equals(BotState.PROFILE_FILLED)) {
             profileData.setDate(usersAnswer);
 //            replyToUser = messagesService.getReplyMessage(chatId, "reply.profileFilled");
-            replyToUser = userMainMenuService.getUserMainMenuMessage(chatId, "Профиль успешно заполнен, свои данные вы можете просмотреть в разделе главного меню \"Моя информация\" \nВоспользуйтесь главным меню");
+//            replyToUser = userMainMenuService.getUserMainMenuMessage(chatId, messagesService.getReplyText("reply.profileFilled"));
+            try {
+                myBot.execute(new SendMessage(inputMsg.getChatId(), messagesService.getReplyText("reply.profileFilled"))
+                .setReplyMarkup(userMainMenuService.getUserMainMenuKeyboard()));
+            } catch (TelegramApiException e) {
+                e.printStackTrace();
+            }
+            myBot.sendClientMealPlan(inputMsg.getChatId());
             userDataCache.setUsersCurrentBotState(userId, BotState.MAIN_MENU);
         }
 
@@ -203,7 +211,6 @@ public class FillingProfileHandler implements InputMessageHandler {
         InlineKeyboardButton buttonEctomorph = new InlineKeyboardButton().setText("Эктоморф");
         InlineKeyboardButton buttonMezomorph = new InlineKeyboardButton().setText("Мезофорф");
         InlineKeyboardButton buttonEndomorph = new InlineKeyboardButton().setText("Эндоморф");
-
 
         //Every button must have callBackData, or else not work !
         buttonEctomorph.setCallbackData("buttonEctomorph");

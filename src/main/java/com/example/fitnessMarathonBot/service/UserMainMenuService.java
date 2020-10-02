@@ -1,5 +1,7 @@
 package com.example.fitnessMarathonBot.service;
 
+import com.example.fitnessMarathonBot.bean.Bot;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.telegram.telegrambots.meta.api.methods.send.SendMessage;
 import org.telegram.telegrambots.meta.api.objects.replykeyboard.ReplyKeyboardMarkup;
@@ -16,16 +18,15 @@ import java.util.List;
  */
 @Service
 public class UserMainMenuService {
+    @Autowired
+    private ReplyMessagesService messagesService;
 
-    public SendMessage getUserMainMenuMessage(final long chatId, final String textMessage) {
-        final ReplyKeyboardMarkup replyKeyboardMarkup = getUserMainMenuKeyboard();
-        final SendMessage mainMenuMessage =
-                createMessageWithKeyboard(chatId, textMessage, replyKeyboardMarkup);
-
-        return mainMenuMessage;
+    public SendMessage getUserMainMenuMessage(final long chatId) {
+        String message = messagesService.getReplyText("reply.ShowUserMainMenu");
+        return new SendMessage(chatId, message).setReplyMarkup(getUserMainMenuKeyboard());
     }
 
-    private ReplyKeyboardMarkup getUserMainMenuKeyboard() {
+    public ReplyKeyboardMarkup getUserMainMenuKeyboard() {
 
         final ReplyKeyboardMarkup replyKeyboardMarkup = new ReplyKeyboardMarkup();
         replyKeyboardMarkup.setSelective(true);
@@ -50,16 +51,16 @@ public class UserMainMenuService {
         return replyKeyboardMarkup;
     }
 
-    private SendMessage createMessageWithKeyboard(final long chatId,
-                                                  String textMessage,
-                                                  final ReplyKeyboardMarkup replyKeyboardMarkup) {
-        final SendMessage sendMessage = new SendMessage();
-        sendMessage.enableMarkdown(true);
-        sendMessage.setChatId(chatId);
-        sendMessage.setText(textMessage);
-        if (replyKeyboardMarkup != null) {
-            sendMessage.setReplyMarkup(replyKeyboardMarkup);
-        }
-        return sendMessage;
-    }
+//    private SendMessage createMessageWithKeyboard(final long chatId,
+//                                                  String textMessage,
+//                                                  final ReplyKeyboardMarkup replyKeyboardMarkup) {
+//        final SendMessage sendMessage = new SendMessage();
+//        sendMessage.enableMarkdown(true);
+//        sendMessage.setChatId(chatId);
+//        sendMessage.setText(textMessage);
+//        if (replyKeyboardMarkup != null) {
+//            sendMessage.setReplyMarkup(replyKeyboardMarkup);
+//        }
+//        return sendMessage;
+//    }
 }
