@@ -4,6 +4,8 @@ import com.example.fitnessMarathonBot.bean.Bot;
 import com.example.fitnessMarathonBot.botapi.BotState;
 import com.example.fitnessMarathonBot.botapi.InputMessageHandler;
 import com.example.fitnessMarathonBot.cache.UserDataCache;
+import com.example.fitnessMarathonBot.fitnessDB.bean.User;
+import com.example.fitnessMarathonBot.fitnessDB.repository.UserRepositoryImpl;
 import com.example.fitnessMarathonBot.photoKeeper.PhotoKeeper;
 import com.example.fitnessMarathonBot.service.AdminMainMenuService;
 import com.example.fitnessMarathonBot.service.ReplyMessagesService;
@@ -11,6 +13,7 @@ import com.example.fitnessMarathonBot.utils.Emojis;
 import lombok.Getter;
 import lombok.Setter;
 import lombok.SneakyThrows;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Lazy;
 import org.springframework.stereotype.Component;
 import org.telegram.telegrambots.meta.api.methods.send.SendMessage;
@@ -29,6 +32,9 @@ public class StartProfileHandler implements InputMessageHandler {
     private UserDataCache userDataCache;
     private AdminMainMenuService adminMainMenuService;
     private Bot myBot;
+
+    @Autowired
+    private UserRepositoryImpl userRepository;
 
     private PhotoKeeper photoKeeper;
 
@@ -66,6 +72,14 @@ public class StartProfileHandler implements InputMessageHandler {
         if (userId == 1331718111) {
             replyToUser = adminMainMenuService.getAdminMainMenuMessage(chatId, "Тут какое то приветствие админа");
         } else {
+            User user = User.builder()
+                    .firstName(inputMsg.getFrom().getFirstName())
+                    .lastName(inputMsg.getFrom().getLastName())
+                    .chatId(inputMsg.getFrom().getId()).build();
+            if (userRepository.findUserByChatId(inputMsg.getChatId()) == null){
+                userRepository.save(user);
+            }
+
             String messageStart = messagesService.getReplyText("reply.askStart");
             String messageLinkInstagram = String.format(messagesService.getReplyText("reply.linkInstagram"),
                     Emojis.POINT_DOWN, Emojis.POINT_DOWN, Emojis.POINT_DOWN, Emojis.POINT_DOWN, Emojis.POINT_DOWN, Emojis.HEART);

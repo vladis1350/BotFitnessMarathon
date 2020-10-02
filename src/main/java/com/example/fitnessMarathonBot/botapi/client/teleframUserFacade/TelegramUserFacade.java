@@ -92,7 +92,6 @@ public class TelegramUserFacade {
                 botState = BotState.REPORT_OF_THE_DAY;
                 break;
             case "Моя информация":
-//                myBot.sendDocument(chatId, "Ваши данные", getUsersProfile(userId));
                 botState = BotState.MY_INFORMATION;
                 break;
             case "Ссылка на чат":
@@ -116,26 +115,12 @@ public class TelegramUserFacade {
         LocaleMessageService localeMessageService;
         BotApiMethod<?> callBackAnswer = userMainMenuService.getUserMainMenuMessage(chatId);
 
-//        if (buttonQuery.getData().equals("buttonEctomorph")) {
-//            UserProfileData userProfileData = userDataCache.getUserProfileData(userId);
-//            userProfileData.setPhysique("Эктоморф");
-//            userDataCache.saveUserProfileData(userId, userProfileData);
-//
-//            userDataCache.setUsersCurrentBotState(userId, BotState.PROFILE_FILLED);
-//        } else if (buttonQuery.getData().equals("buttonMezomorph")) {
-//            UserProfileData userProfileData = userDataCache.getUserProfileData(userId);
-//            userProfileData.setPhysique("Мезоморф");
-//            userDataCache.saveUserProfileData(userId, userProfileData);
-//            userDataCache.setUsersCurrentBotState(userId, BotState.PROFILE_FILLED);
-//        } else if (buttonQuery.getData().equals("buttonEndomorph")) {
-//            UserProfileData userProfileData = userDataCache.getUserProfileData(userId);
-//            userProfileData.setPhysique("Эндоморф");
-//            userDataCache.saveUserProfileData(userId, userProfileData);
-//            userDataCache.setUsersCurrentBotState(userId, BotState.PROFILE_FILLED);
-//        } else
-            if (buttonQuery.getData().equals("buttonInputPersonalInfo")){
+        if (buttonQuery.getData().equals("buttonInputPersonalInfo")) {
             callBackAnswer = new SendMessage(chatId, messagesService.getReplyText("reply.askName"));
             userDataCache.setUsersCurrentBotState(userId, BotState.ASK_AGE);
+        } else if (buttonQuery.getData().equals("buttonPersonalInfo")) {
+            callBackAnswer = new SendMessage(chatId, messagesService.getReplyText("reply.askNeck"));
+            userDataCache.setUsersCurrentBotState(userId, BotState.ASK_ARM);
         }
 
         return callBackAnswer;
