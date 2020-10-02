@@ -29,6 +29,8 @@ public class BotStateContext {
             return messageHandlers.get(BotState.ASK_PERSONAL_INFO);
         } else if (isSupplementProfileState(currentState)) {
             return messageHandlers.get(BotState.ASK_SUPPLEMENT_PERSONAL_INFO);
+        } else if(isFillingReport(currentState)) {
+            return messageHandlers.get(BotState.ASK_REPORT);
         }
 
         return messageHandlers.get(currentState);
@@ -42,6 +44,19 @@ public class BotStateContext {
             case ASK_AGE:
             case ASK_PERSONAL_INFO:
             case PROFILE_FILLED:
+                return true;
+            default:
+                return false;
+        }
+    }
+
+    private boolean isFillingReport(BotState currentState){
+
+        switch (currentState) {
+            case ASK_REPORT:
+            case ASK_GOALS:
+            case ASK_PHOTO:
+            case FILLING_REPORT:
                 return true;
             default:
                 return false;

@@ -6,9 +6,7 @@ import com.example.fitnessMarathonBot.botapi.InputMessageHandler;
 import com.example.fitnessMarathonBot.cache.UserDataCache;
 import com.example.fitnessMarathonBot.fitnessDB.bean.BodyParam;
 import com.example.fitnessMarathonBot.fitnessDB.bean.User;
-import com.example.fitnessMarathonBot.fitnessDB.bean.UserProfile;
 import com.example.fitnessMarathonBot.fitnessDB.repository.BodyParamRepositoryImpl;
-import com.example.fitnessMarathonBot.fitnessDB.repository.UserProfileImpl;
 import com.example.fitnessMarathonBot.fitnessDB.repository.UserRepositoryImpl;
 import com.example.fitnessMarathonBot.service.ReplyMessagesService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -16,24 +14,16 @@ import org.springframework.context.annotation.Lazy;
 import org.springframework.stereotype.Component;
 import org.telegram.telegrambots.meta.api.methods.send.SendMessage;
 import org.telegram.telegrambots.meta.api.objects.Message;
-import org.telegram.telegrambots.meta.api.objects.replykeyboard.InlineKeyboardMarkup;
-import org.telegram.telegrambots.meta.api.objects.replykeyboard.buttons.InlineKeyboardButton;
 
 import java.text.SimpleDateFormat;
-import java.util.ArrayList;
 import java.util.Date;
-import java.util.List;
 
 @Component
 public class SupplementProfileHandler implements InputMessageHandler {
     private UserDataCache userDataCache;
-    private Bot myBot;
 
     @Autowired
     private ReplyMessagesService messagesService;
-
-    @Autowired
-    private UserProfileImpl userProfileRepo;
 
     @Autowired
     private BodyParamRepositoryImpl bodyParamRepository;
@@ -41,9 +31,8 @@ public class SupplementProfileHandler implements InputMessageHandler {
     @Autowired
     private UserRepositoryImpl userRepository;
 
-    public SupplementProfileHandler(UserDataCache userDataCache, @Lazy Bot myBot) {
+    public SupplementProfileHandler(UserDataCache userDataCache) {
         this.userDataCache = userDataCache;
-        this.myBot = myBot;
     }
 
     @Override

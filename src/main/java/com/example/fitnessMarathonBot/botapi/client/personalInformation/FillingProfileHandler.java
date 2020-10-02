@@ -168,8 +168,6 @@ public class FillingProfileHandler implements InputMessageHandler {
                 userProfile.setPk(userProfilesId);
                 userProfileImpl.save(userProfile);
             }
-//            replyToUser = messagesService.getReplyMessage(chatId, "reply.profileFilled");
-//            replyToUser = userMainMenuService.getUserMainMenuMessage(chatId, messagesService.getReplyText("reply.profileFilled"));
             try {
                 myBot.execute(new SendMessage(inputMsg.getChatId(), messagesService.getReplyText("reply.profileFilled"))
                         .setReplyMarkup(userMainMenuService.getUserMainMenuKeyboard()));

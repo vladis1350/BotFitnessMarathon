@@ -19,10 +19,9 @@ public class ShowChatHandler implements InputMessageHandler {
     @Override
     public SendMessage handle(Message message) {
         final int userId = message.getFrom().getId();
-        final UserProfileData profileData = userDataCache.getUserProfileData(userId);
 
         userDataCache.setUsersCurrentBotState(userId, BotState.LINK_TO_CHAT);
-        return new SendMessage(message.getChatId(), "Напишите ваше сообщение!");
+        return new SendMessage(message.getChatId(), "https://t.me/joinchat/LJ52BhXtyVnAeZK8SZ3OUQ");
     }
 
     @Override

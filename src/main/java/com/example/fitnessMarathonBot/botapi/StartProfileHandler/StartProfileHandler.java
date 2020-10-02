@@ -121,7 +121,6 @@ public class StartProfileHandler implements InputMessageHandler {
                     String.format(messagesService.getReplyText("reply.requestEnterYourData"), Emojis.MEMO, Emojis.POINT_DOWN));
 
             replyToUser.setReplyMarkup(getInlineMessageButtons());
-//            myBot.execute(replyToUser);
         }
 
         return replyToUser;
