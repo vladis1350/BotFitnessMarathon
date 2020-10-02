@@ -102,6 +102,8 @@ public class StartProfileHandler implements InputMessageHandler {
             myBot.sendPhoto(chatId, "", "howMuchWater");
             Thread.sleep(5000);
 
+
+
             userDataCache.setUsersCurrentBotState(inputMsg.getFrom().getId(), BotState.ASK_PERSONAL_INFO);
             replyToUser = new SendMessage(chatId,
                     String.format(messagesService.getReplyText("reply.requestEnterYourData"), Emojis.MEMO, Emojis.POINT_DOWN));
