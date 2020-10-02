@@ -68,6 +68,7 @@ public class StartProfileHandler implements InputMessageHandler {
         int userId = inputMsg.getFrom().getId();
         long chatId = inputMsg.getChatId();
         SendMessage replyToUser = null;
+
         if (userId == 1331718111) {
             replyToUser = adminMainMenuService.getAdminMainMenuMessage(chatId, "Тут какое то приветствие админа");
         } else {
@@ -86,12 +87,30 @@ public class StartProfileHandler implements InputMessageHandler {
                     Emojis.HEART, Emojis.POINT_DOWN);
             String messageWhatAwaitsUs = String.format(messagesService.getReplyText("reply.whatAwaitsUs"),
                     Emojis.ARROW_RIGHT, Emojis.HEAVY_CHECK_MARK, Emojis.HEAVY_CHECK_MARK, Emojis.HEAVY_CHECK_MARK, Emojis.HEAVY_CHECK_MARK, Emojis.HEAVY_CHECK_MARK);
+            String messageControl = String.format(messagesService.getReplyText("reply.Control"), Emojis.POINT_DOWN, Emojis.POINT_DOWN, Emojis.POINT_DOWN);
+            String messageTrackingHabits = messagesService.getReplyText("reply.TrackingHabits");
+            String messageDayOne = String.format(messagesService.getReplyText("reply.DayOne"), Emojis.WARNING, Emojis.HEART,
+                    Emojis.ARROW_RIGHT, Emojis.ARROW_RIGHT, Emojis.POINT_RIGHT, Emojis.POINT_RIGHT, Emojis.POINT_RIGHT,
+                    Emojis.HEAVY_CHECK_MARK, Emojis.POINT_RIGHT, Emojis.ARROW_RIGHT, Emojis.POINT_RIGHT, Emojis.GRIN,
+                    Emojis.ARROW_RIGHT, Emojis.WARNING, Emojis.ARROW_RIGHT);
+            String messageToday = String.format(messagesService.getReplyText("reply.Today"), Emojis.POINT_RIGHT, Emojis.POINT_RIGHT,
+                    Emojis.POINT_RIGHT);
+            String messageIndividualPlanCaution = String.format(messagesService.getReplyText("reply.IndividualPlanCaution"), Emojis.BLUSH);
+            String messageDietPlanInstruction = String.format(messagesService.getReplyText("reply.DietPlanInstruction"), Emojis.POINT_RIGHT);
+            sendMessages.add(new SendMessage(chatId, messageStart));
+            sendMessages.add(new SendMessage(chatId, messageLinkInstagram));
+            sendMessages.add(new SendMessage(chatId, messageControl));
+            sendMessages.add(new SendMessage(chatId, messageTrackingHabits));
+            sendMessages.add(new SendMessage(chatId, messageDayOne));
+            sendMessages.add(new SendMessage(chatId, messageToday));
+            sendMessages.add(new SendMessage(chatId, messageIndividualPlanCaution));
+            sendMessages.add(new SendMessage(chatId, messageDietPlanInstruction));
             sendMessages.add(new SendMessage(chatId, messageGreeting));
             sendMessages.add(new SendMessage(chatId, messageStart));
             sendMessages.add(new SendMessage(chatId, messageLinkInstagram));
             sendMessages.add(new SendMessage(chatId, messageWhatAwaitsUs));
-//            myBot.sendListMessages(sendMessages);
-//
+            myBot.sendListMessages(sendMessages);
+
 //            myBot.sendPhoto(chatId, "", "whatAwaitsUs");
 //            Thread.sleep(5000);
 //            myBot.execute(new SendMessage(chatId,
@@ -115,6 +134,7 @@ public class StartProfileHandler implements InputMessageHandler {
 //                            Emojis.POINT_DOWN,Emojis.POINT_DOWN,Emojis.POINT_DOWN,Emojis.POINT_DOWN)));
 //            myBot.sendPhoto(chatId, "", "howMuchWater");
 //            Thread.sleep(5000);
+
 
             userDataCache.setUsersCurrentBotState(inputMsg.getFrom().getId(), BotState.ASK_PERSONAL_INFO);
             replyToUser = new SendMessage(chatId,
