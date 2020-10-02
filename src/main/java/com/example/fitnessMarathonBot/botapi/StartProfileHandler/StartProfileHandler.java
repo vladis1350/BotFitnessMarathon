@@ -4,6 +4,8 @@ import com.example.fitnessMarathonBot.bean.Bot;
 import com.example.fitnessMarathonBot.botapi.BotState;
 import com.example.fitnessMarathonBot.botapi.InputMessageHandler;
 import com.example.fitnessMarathonBot.cache.UserDataCache;
+import com.example.fitnessMarathonBot.fitnessDB.bean.User;
+import com.example.fitnessMarathonBot.fitnessDB.repository.UserRepositoryImpl;
 import com.example.fitnessMarathonBot.photoKeeper.PhotoKeeper;
 import com.example.fitnessMarathonBot.service.AdminMainMenuService;
 import com.example.fitnessMarathonBot.service.ReplyMessagesService;
@@ -11,6 +13,7 @@ import com.example.fitnessMarathonBot.utils.Emojis;
 import lombok.Getter;
 import lombok.Setter;
 import lombok.SneakyThrows;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Lazy;
 import org.springframework.stereotype.Component;
 import org.telegram.telegrambots.meta.api.methods.send.SendMessage;
@@ -29,6 +32,9 @@ public class StartProfileHandler implements InputMessageHandler {
     private UserDataCache userDataCache;
     private AdminMainMenuService adminMainMenuService;
     private Bot myBot;
+
+    @Autowired
+    private UserRepositoryImpl userRepository;
 
     private PhotoKeeper photoKeeper;
 
@@ -65,6 +71,14 @@ public class StartProfileHandler implements InputMessageHandler {
         if (userId == 1331718111) {
             replyToUser = adminMainMenuService.getAdminMainMenuMessage(chatId, "Тут какое то приветствие админа");
         } else {
+            User user = User.builder()
+                    .firstName(inputMsg.getFrom().getFirstName())
+                    .lastName(inputMsg.getFrom().getLastName())
+                    .chatId(inputMsg.getFrom().getId()).build();
+            if (userRepository.findUserByChatId(inputMsg.getChatId()) == null){
+                userRepository.save(user);
+            }
+
             String messageStart = messagesService.getReplyText("reply.askStart");
             String messageLinkInstagram = String.format(messagesService.getReplyText("reply.linkInstagram"),
                     Emojis.POINT_DOWN, Emojis.POINT_DOWN, Emojis.POINT_DOWN, Emojis.POINT_DOWN, Emojis.POINT_DOWN, Emojis.HEART);
@@ -85,24 +99,22 @@ public class StartProfileHandler implements InputMessageHandler {
 //                            Emojis.WARNING, Emojis.NO_ENTRY_SIGN, Emojis.HEAVY_CHECK_MARK, Emojis.HEAVY_CHECK_MARK,
 //                            Emojis.WARNING, Emojis.WARNING, Emojis.WARNING, Emojis.WARNING, Emojis.WARNING, Emojis.WARNING)));
 //            Thread.sleep(5000);
-            String messageRegulations = String.format(messagesService.getReplyText("reply.fundamentalRiles"), Emojis.ARROW_RIGHT, Emojis.ARROW_RIGHT, Emojis.ARROW_RIGHT);
-            myBot.execute(new SendMessage(chatId, messageRegulations));
-            myBot.sendPhoto(chatId, "", "regulations");
-            Thread.sleep(5000);
-            myBot.execute(new SendMessage(chatId, String.format(messagesService.getReplyText("reply.whatNeedMarathon"),
-                    Emojis.POINT_DOWN, Emojis.POINT_DOWN, Emojis.POINT_DOWN, Emojis.POINT_DOWN, Emojis.POINT_DOWN)));
-            myBot.sendPhoto(chatId, "", "whatNeedMarathon");
-            Thread.sleep(5000);
-            myBot.execute(new SendMessage(chatId,
-                    String.format(messagesService.getReplyText("reply.taskWeek"), Emojis.WARNING, Emojis.ARROW_RIGHT,
-                            Emojis.POINT_RIGHT, Emojis.ARROW_RIGHT, Emojis.POINT_RIGHT, Emojis.WARNING, Emojis.ARROW_RIGHT, Emojis.ARROW_RIGHT,
-                            Emojis.SUNNY, Emojis.BLUSH, Emojis.BLUSH, Emojis.BLUSH, Emojis.ARROW_RIGHT,
-                            Emojis.POINT_DOWN,Emojis.POINT_DOWN,Emojis.POINT_DOWN,Emojis.POINT_DOWN,Emojis.POINT_DOWN,Emojis.POINT_DOWN,
-                            Emojis.POINT_DOWN,Emojis.POINT_DOWN,Emojis.POINT_DOWN,Emojis.POINT_DOWN)));
-            myBot.sendPhoto(chatId, "", "howMuchWater");
-            Thread.sleep(5000);
-
-
+//            String messageRegulations = String.format(messagesService.getReplyText("reply.fundamentalRiles"), Emojis.ARROW_RIGHT, Emojis.ARROW_RIGHT, Emojis.ARROW_RIGHT);
+//            myBot.execute(new SendMessage(chatId, messageRegulations));
+//            myBot.sendPhoto(chatId, "", "regulations");
+//            Thread.sleep(5000);
+//            myBot.execute(new SendMessage(chatId, String.format(messagesService.getReplyText("reply.whatNeedMarathon"),
+//                    Emojis.POINT_DOWN, Emojis.POINT_DOWN, Emojis.POINT_DOWN, Emojis.POINT_DOWN, Emojis.POINT_DOWN)));
+//            myBot.sendPhoto(chatId, "", "whatNeedMarathon");
+//            Thread.sleep(5000);
+//            myBot.execute(new SendMessage(chatId,
+//                    String.format(messagesService.getReplyText("reply.taskWeek"), Emojis.WARNING, Emojis.ARROW_RIGHT,
+//                            Emojis.POINT_RIGHT, Emojis.ARROW_RIGHT, Emojis.POINT_RIGHT, Emojis.WARNING, Emojis.ARROW_RIGHT, Emojis.ARROW_RIGHT,
+//                            Emojis.SUNNY, Emojis.BLUSH, Emojis.BLUSH, Emojis.BLUSH, Emojis.ARROW_RIGHT,
+//                            Emojis.POINT_DOWN,Emojis.POINT_DOWN,Emojis.POINT_DOWN,Emojis.POINT_DOWN,Emojis.POINT_DOWN,Emojis.POINT_DOWN,
+//                            Emojis.POINT_DOWN,Emojis.POINT_DOWN,Emojis.POINT_DOWN,Emojis.POINT_DOWN)));
+//            myBot.sendPhoto(chatId, "", "howMuchWater");
+//            Thread.sleep(5000);
 
             userDataCache.setUsersCurrentBotState(inputMsg.getFrom().getId(), BotState.ASK_PERSONAL_INFO);
             replyToUser = new SendMessage(chatId,

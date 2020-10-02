@@ -27,6 +27,8 @@ public class BotStateContext {
     private InputMessageHandler findMessageHandler(BotState currentState) {
         if (isFillingProfileState(currentState)) {
             return messageHandlers.get(BotState.ASK_PERSONAL_INFO);
+        } else if (isSupplementProfileState(currentState)) {
+            return messageHandlers.get(BotState.ASK_SUPPLEMENT_PERSONAL_INFO);
         }
 
         return messageHandlers.get(currentState);
@@ -37,19 +39,28 @@ public class BotStateContext {
             case ASK_NAME:
             case ASK_HEIGHT:
             case ASK_WEIGHT:
-            case ASK_PHYSIQUE:
             case ASK_AGE:
+            case ASK_PERSONAL_INFO:
+            case PROFILE_FILLED:
+                return true;
+            default:
+                return false;
+        }
+    }
+
+    private boolean isSupplementProfileState(BotState currentState) {
+        switch (currentState) {
             case ASK_BELLY:
             case ASK_CHEST:
-            case ASK_THIGHS:
-            case ASK_THIGH:
+            case ASK_HIPS:
+            case ASK_HIP:
             case ASK_ARM:
             case ASK_NECK:
             case ASK_SHIN:
             case ASK_DATE:
             case ASK_WAIST:
-            case ASK_PERSONAL_INFO:
-            case PROFILE_FILLED:
+            case PERSONAL_INFO_FILLED:
+            case ASK_SUPPLEMENT_PERSONAL_INFO:
                 return true;
             default:
                 return false;
