@@ -9,25 +9,37 @@ import javax.persistence.*;
 import java.io.Serializable;
 
 @Entity
+@Data
 @Builder
 @AllArgsConstructor
 @NoArgsConstructor
-@Data
-@Table(name = "user_photo")
-public class UserPhoto implements Serializable {
+@Table(name = "list_user_goals")
+public class ListUserGoals implements Serializable {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "user_photo_id")
+    @Column(name = "user_goals_id")
     private long id;
 
     @Column(name = "time_stamp")
     private String timeStamp;
 
-    @Column(name = "image_id")
-    private String imageId;
+    @Column(name = "task_one")
+    private boolean taskOne;
 
-    @Column(name = "image_category")
-    private String imageCategory;
+    @Column(name = "task_two")
+    private boolean taskTwo;
+
+    @Column(name = "task_three")
+    private boolean taskThree;
+
+    @Column(name = "task_four")
+    private boolean taskFour;
+
+    @Column(name = "task_five")
+    private boolean taskFive;
+
+    @Column(name = "task_six")
+    private boolean taskSix;
 
     @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "user_id", nullable = false)

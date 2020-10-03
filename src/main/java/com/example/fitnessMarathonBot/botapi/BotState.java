@@ -10,7 +10,6 @@ public enum BotState {
     ASK_SUPPLEMENT_PERSONAL_INFO,
     ASK_HEIGHT,
     ASK_WEIGHT,
-    ASK_PHYSIQUE,
     ASK_AGE,
     ASK_NAME,
     ASK_ARM,
@@ -46,7 +45,6 @@ public enum BotState {
 
     MAIN_MENU,
     REPORT_OF_THE_DAY,
-    SHOW_CHAT_WITH_MANAGER,
     TASK,
     MY_INFORMATION,
     LINK_TO_CHAT,

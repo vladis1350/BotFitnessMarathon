@@ -6,6 +6,8 @@ import com.example.fitnessMarathonBot.botapi.BotState;
 import com.example.fitnessMarathonBot.botapi.BotStateContext;
 import com.example.fitnessMarathonBot.botapi.client.buttonHandlers.ButtonHandler;
 import com.example.fitnessMarathonBot.cache.UserDataCache;
+import com.example.fitnessMarathonBot.fitnessDB.bean.ListUserGoals;
+import com.example.fitnessMarathonBot.fitnessDB.service.ListUserGoalsService;
 import com.example.fitnessMarathonBot.fitnessDB.service.UserPhotoService;
 import com.example.fitnessMarathonBot.service.LocaleMessageService;
 import com.example.fitnessMarathonBot.service.ReplyMessagesService;
@@ -33,9 +35,7 @@ import java.util.Comparator;
 import java.util.List;
 import java.util.Objects;
 
-/**
- * @author get inspired by Sergei Viacheslaev's video
- */
+
 @Component
 @Slf4j
 @Getter
@@ -52,6 +52,9 @@ public class TelegramUserFacade {
 
     @Autowired
     private UserPhotoService userPhotoService;
+
+    @Autowired
+    private ListUserGoalsService listUserGoalsService;
 
     public TelegramUserFacade(BotStateContext botStateContext, UserDataCache userDataCache, UserMainMenuService userMainMenuService,
                               @Lazy Bot myBot, ReplyMessagesService messagesService) {
@@ -170,21 +173,30 @@ public class TelegramUserFacade {
             userDataCache.setUsersCurrentBotState(userId, BotState.ASK_GOALS);
 
         } else if (buttonQuery.getData().equals("buttonTaskOne")) {
+            listUserGoalsService.markTargetOne(chatId);
             callBackAnswer = new SendMessage(chatId, "Успешно записано!");
             userDataCache.setUsersCurrentBotState(userId, BotState.ASK_TASK_ONE);
+
         } else if (buttonQuery.getData().equals("buttonTaskTwo")) {
+            listUserGoalsService.markTargetTwo(chatId);
             callBackAnswer = new SendMessage(chatId, "Успешно записано!");
             userDataCache.setUsersCurrentBotState(userId, BotState.ASK_TASK_TWO);
+
         } else if (buttonQuery.getData().equals("buttonTaskThree")) {
+            listUserGoalsService.markTargetThree(chatId);
             callBackAnswer = new SendMessage(chatId, "Успешно записано!");
             userDataCache.setUsersCurrentBotState(userId, BotState.ASK_TASK_THREE);
+
         } else if (buttonQuery.getData().equals("buttonTaskFour")) {
+            listUserGoalsService.markTargetFour(chatId);
             callBackAnswer = new SendMessage(chatId, "Успешно записано!");
             userDataCache.setUsersCurrentBotState(userId, BotState.ASK_TASK_FOUR);
         } else if (buttonQuery.getData().equals("buttonTaskFive")) {
+            listUserGoalsService.markTargetFive(chatId);
             callBackAnswer = new SendMessage(chatId, "Успешно записано!");
             userDataCache.setUsersCurrentBotState(userId, BotState.ASK_TASK_FIVE);
         } else if (buttonQuery.getData().equals("buttonTaskSix")) {
+            listUserGoalsService.markTargetSix(chatId);
             callBackAnswer = new SendMessage(chatId, "Успешно записано!");
             userDataCache.setUsersCurrentBotState(userId, BotState.ASK_TASK_SIX);
         }
