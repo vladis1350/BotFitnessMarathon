@@ -33,6 +33,12 @@ public enum BotState {
     REFRESH_GOALS,
     ANSWER_THE_QUESTIONS,
 
+    ASK_TASK_ONE,
+    ASK_TASK_TWO,
+    ASK_TASK_THREE,
+    ASK_TASK_FOUR,
+    ASK_TASK_FIVE,
+    ASK_TASK_SIX,
     ASK_PHOTO,
     ASK_GOALS,
     ASK_REPORT,

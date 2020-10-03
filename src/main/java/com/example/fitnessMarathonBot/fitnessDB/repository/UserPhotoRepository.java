@@ -11,5 +11,5 @@ import java.util.List;
 public interface UserPhotoRepository extends JpaRepository<UserPhoto, Long> {
 
     List<UserPhoto> findUserPhotoByUser(User user);
-
+    List<UserPhoto> findUserPhotoByTimeStampAndUser(String timeStamp, User user);
 }

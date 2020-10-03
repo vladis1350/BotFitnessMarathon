@@ -68,8 +68,8 @@ public class SupplementProfileHandler implements InputMessageHandler {
         }
         if (botState.equals(BotState.ASK_CHEST)) {
             User user = userRepository.findUserByChatId(inputMsg.getChatId());
-            if (bodyParamRepository.findById(user.getUser_id()).isPresent()) {
-                BodyParam bodyParam = bodyParamRepository.findById(user.getUser_id()).get();
+            if (bodyParamRepository.findBodyParamByUser(user) != null) {
+                BodyParam bodyParam = bodyParamRepository.findBodyParamByUser(user);
                 bodyParam.setArm(usersAnswer);
                 bodyParamRepository.save(bodyParam);
             }
@@ -78,8 +78,8 @@ public class SupplementProfileHandler implements InputMessageHandler {
         }
         if (botState.equals(BotState.ASK_WAIST)) {
             User user = userRepository.findUserByChatId(inputMsg.getChatId());
-            if (bodyParamRepository.findById(user.getUser_id()).isPresent()) {
-                BodyParam bodyParam = bodyParamRepository.findById(user.getUser_id()).get();
+            if (bodyParamRepository.findBodyParamByUser(user) != null) {
+                BodyParam bodyParam = bodyParamRepository.findBodyParamByUser(user);
                 bodyParam.setChest(usersAnswer);
                 bodyParamRepository.save(bodyParam);
             }
@@ -89,8 +89,8 @@ public class SupplementProfileHandler implements InputMessageHandler {
         }
         if (botState.equals(BotState.ASK_BELLY)) {
             User user = userRepository.findUserByChatId(inputMsg.getChatId());
-            if (bodyParamRepository.findById(user.getUser_id()).isPresent()) {
-                BodyParam bodyParam = bodyParamRepository.findById(user.getUser_id()).get();
+            if (bodyParamRepository.findBodyParamByUser(user) != null) {
+                BodyParam bodyParam = bodyParamRepository.findBodyParamByUser(user);
                 bodyParam.setWaist(usersAnswer);
                 bodyParamRepository.save(bodyParam);
             }
@@ -100,8 +100,8 @@ public class SupplementProfileHandler implements InputMessageHandler {
         }
         if (botState.equals(BotState.ASK_HIPS)) {
             User user = userRepository.findUserByChatId(inputMsg.getChatId());
-            if (bodyParamRepository.findById(user.getUser_id()).isPresent()) {
-                BodyParam bodyParam = bodyParamRepository.findById(user.getUser_id()).get();
+            if (bodyParamRepository.findBodyParamByUser(user) != null) {
+                BodyParam bodyParam = bodyParamRepository.findBodyParamByUser(user);
                 bodyParam.setStomach(usersAnswer);
                 bodyParamRepository.save(bodyParam);
             }
@@ -110,8 +110,8 @@ public class SupplementProfileHandler implements InputMessageHandler {
         }
         if (botState.equals(BotState.ASK_HIP)) {
             User user = userRepository.findUserByChatId(inputMsg.getChatId());
-            if (bodyParamRepository.findById(user.getUser_id()).isPresent()) {
-                BodyParam bodyParam = bodyParamRepository.findById(user.getUser_id()).get();
+            if (bodyParamRepository.findBodyParamByUser(user) != null) {
+                BodyParam bodyParam = bodyParamRepository.findBodyParamByUser(user);
                 bodyParam.setHips(usersAnswer);
                 bodyParamRepository.save(bodyParam);
             }
@@ -120,8 +120,8 @@ public class SupplementProfileHandler implements InputMessageHandler {
         }
         if (botState.equals(BotState.ASK_SHIN)) {
             User user = userRepository.findUserByChatId(inputMsg.getChatId());
-            if (bodyParamRepository.findById(user.getUser_id()).isPresent()) {
-                BodyParam bodyParam = bodyParamRepository.findById(user.getUser_id()).get();
+            if (bodyParamRepository.findBodyParamByUser(user) != null) {
+                BodyParam bodyParam = bodyParamRepository.findBodyParamByUser(user);
                 bodyParam.setHip(usersAnswer);
                 bodyParamRepository.save(bodyParam);
             }
@@ -132,8 +132,8 @@ public class SupplementProfileHandler implements InputMessageHandler {
             User user = userRepository.findUserByChatId(inputMsg.getChatId());
             Date date = new Date();
             SimpleDateFormat formatForDateNow = new SimpleDateFormat("dd.MM.yyyy");
-            if (bodyParamRepository.findById(user.getUser_id()).isPresent()) {
-                BodyParam bodyParam = bodyParamRepository.findById(user.getUser_id()).get();
+            if (bodyParamRepository.findBodyParamByUser(user) != null) {
+                BodyParam bodyParam = bodyParamRepository.findBodyParamByUser(user);
                 bodyParam.setShin(usersAnswer);
                 bodyParam.setDate(formatForDateNow.format(date));
                 bodyParamRepository.save(bodyParam);

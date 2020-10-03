@@ -6,7 +6,6 @@ import com.example.fitnessMarathonBot.botapi.InputMessageHandler;
 import com.example.fitnessMarathonBot.cache.UserDataCache;
 import com.example.fitnessMarathonBot.fitnessDB.bean.User;
 import com.example.fitnessMarathonBot.fitnessDB.repository.UserRepositoryImpl;
-import com.example.fitnessMarathonBot.photoKeeper.PhotoKeeper;
 import com.example.fitnessMarathonBot.service.AdminMainMenuService;
 import com.example.fitnessMarathonBot.service.ReplyMessagesService;
 import com.example.fitnessMarathonBot.utils.Emojis;
@@ -36,15 +35,12 @@ public class StartProfileHandler implements InputMessageHandler {
     @Autowired
     private UserRepositoryImpl userRepository;
 
-    private PhotoKeeper photoKeeper;
-
     public StartProfileHandler(ReplyMessagesService messagesService, UserDataCache userDataCache,
-                               AdminMainMenuService adminMainMenuService, @Lazy Bot myBot, PhotoKeeper photoKeeper) {
+                               AdminMainMenuService adminMainMenuService, @Lazy Bot myBot) {
         this.messagesService = messagesService;
         this.userDataCache = userDataCache;
         this.adminMainMenuService = adminMainMenuService;
         this.myBot = myBot;
-        this.photoKeeper = photoKeeper;
     }
 
     @SneakyThrows
@@ -63,7 +59,6 @@ public class StartProfileHandler implements InputMessageHandler {
 
     @SneakyThrows
     private SendMessage processUsersInput(Message inputMsg) {
-        photoKeeper.setPhotoInfo();
         List<SendMessage> sendMessages = new ArrayList<>();
         int userId = inputMsg.getFrom().getId();
         long chatId = inputMsg.getChatId();

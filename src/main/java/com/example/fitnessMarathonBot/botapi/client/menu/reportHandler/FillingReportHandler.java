@@ -23,7 +23,7 @@ public class FillingReportHandler implements InputMessageHandler {
     @Override
     public SendMessage handle(Message message) {
         if (userDataCache.getUsersCurrentBotState(message.getFrom().getId()).equals(BotState.ASK_REPORT)) {
-            userDataCache.setUsersCurrentBotState(message.getFrom().getId(), BotState.ASK_PHOTO);
+            userDataCache.setUsersCurrentBotState(message.getFrom().getId(), BotState.FILLING_REPORT);
         }
         return processUsersInput(message);
     }
@@ -40,10 +40,24 @@ public class FillingReportHandler implements InputMessageHandler {
         SendMessage replyToUser = null;
         BotState botState = userDataCache.getUsersCurrentBotState(userId);
 
-        if (botState.equals(BotState.ASK_GOALS)) {
-
+        if (botState.equals(BotState.ASK_TASK_ONE)) {
+            replyToUser = new SendMessage(chatId, "Успешно записано!");
         }
-
+        if (botState.equals(BotState.ASK_TASK_TWO)) {
+            replyToUser = new SendMessage(chatId, "Успешно записано!");
+        }
+        if (botState.equals(BotState.ASK_TASK_THREE)) {
+            replyToUser = new SendMessage(chatId, "Успешно записано!");
+        }
+        if (botState.equals(BotState.ASK_TASK_FOUR)) {
+            replyToUser = new SendMessage(chatId, "Успешно записано!");
+        }
+        if (botState.equals(BotState.ASK_TASK_FIVE)) {
+            replyToUser = new SendMessage(chatId, "Успешно записано!");
+        }
+        if (botState.equals(BotState.ASK_TASK_SIX)) {
+            replyToUser = new SendMessage(chatId, "Успешно записано!");
+        }
         return replyToUser;
     }
 }

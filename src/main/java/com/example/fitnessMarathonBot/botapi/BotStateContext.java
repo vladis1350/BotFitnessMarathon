@@ -56,6 +56,12 @@ public class BotStateContext {
             case ASK_REPORT:
             case ASK_GOALS:
             case ASK_PHOTO:
+            case ASK_TASK_ONE:
+            case ASK_TASK_TWO:
+            case ASK_TASK_THREE:
+            case ASK_TASK_FOUR:
+            case ASK_TASK_FIVE:
+            case ASK_TASK_SIX:
             case FILLING_REPORT:
                 return true;
             default:
