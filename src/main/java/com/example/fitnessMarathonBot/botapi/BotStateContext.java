@@ -33,12 +33,24 @@ public class BotStateContext {
             return messageHandlers.get(BotState.ASK_REPORT);
         } else if(isFillingGoals(currentState)) {
             return messageHandlers.get(BotState.FILLING_GOALS);
+        } else if (isFillingMarathonState(currentState)) {
+            return messageHandlers.get(BotState.START_NEW_MARATHON);
         }
-
         return messageHandlers.get(currentState);
     }
 
-    private boolean isFillingProfileState(BotState currentState) {
+        private boolean isFillingMarathonState(BotState currentState) {
+            switch (currentState) {
+                case START_NEW_MARATHON:
+                case ASK_DATE_START_MARATHON:
+                case ASK_DATE_FINISH_MARATHON:
+                    return true;
+                default:
+                    return false;
+            }
+        }
+
+        private boolean isFillingProfileState(BotState currentState) {
         switch (currentState) {
             case ASK_NAME:
             case ASK_HEIGHT:
