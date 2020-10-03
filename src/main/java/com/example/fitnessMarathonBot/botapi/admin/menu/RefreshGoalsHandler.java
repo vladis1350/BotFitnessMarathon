@@ -1,27 +1,26 @@
 package com.example.fitnessMarathonBot.botapi.admin.menu;
 
-import com.example.fitnessMarathonBot.bean.UserProfileData;
 import com.example.fitnessMarathonBot.botapi.BotState;
 import com.example.fitnessMarathonBot.botapi.InputMessageHandler;
-import com.example.fitnessMarathonBot.cache.UserDataCache;
+import com.example.fitnessMarathonBot.botapi.admin.adminButtonHandler.AdminButtonHandler;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import org.telegram.telegrambots.meta.api.methods.send.SendMessage;
 import org.telegram.telegrambots.meta.api.objects.Message;
 
 @Component
 public class RefreshGoalsHandler implements InputMessageHandler {
-    private UserDataCache userDataCache;
 
-    public RefreshGoalsHandler(UserDataCache userDataCache) {
-        this.userDataCache = userDataCache;
-    }
+    @Autowired
+    private AdminButtonHandler adminButtonHandler;
+
+    public RefreshGoalsHandler() {}
 
     @Override
     public SendMessage handle(Message message) {
-        if (userDataCache.getUsersCurrentBotState(message.getFrom().getId()).equals(BotState.REFRESH_GOALS)) {
-            userDataCache.setUsersCurrentBotState(message.getFrom().getId(), BotState.ASK_ADMIN_TASK_ONE);
-        }
-        return processUsersInput(message);
+        long chatId = message.getChatId();
+
+        return adminButtonHandler.getMessageAndGoalsAdminButtons(chatId);
     }
 
     @Override
@@ -29,32 +28,5 @@ public class RefreshGoalsHandler implements InputMessageHandler {
         return BotState.REFRESH_GOALS;
     }
 
-    private SendMessage processUsersInput(Message inputMsg) {
-        String usersAnswer = inputMsg.getText();
-        int userId = inputMsg.getFrom().getId();
-        long chatId = inputMsg.getChatId();
-        SendMessage replyToUser = null;
-        BotState botState = userDataCache.getUsersCurrentBotState(userId);
-
-        if (botState.equals(BotState.ASK_ADMIN_TASK_ONE)) {
-            replyToUser = new SendMessage(chatId, "Успешно записано!");
-        }
-        if (botState.equals(BotState.ASK_ADMIN_TASK_TWO)) {
-            replyToUser = new SendMessage(chatId, "Успешно записано!");
-        }
-        if (botState.equals(BotState.ASK_ADMIN_TASK_THREE)) {
-            replyToUser = new SendMessage(chatId, "Успешно записано!");
-        }
-        if (botState.equals(BotState.ASK_ADMIN_TASK_FOUR)) {
-            replyToUser = new SendMessage(chatId, "Успешно записано!");
-        }
-        if (botState.equals(BotState.ASK_ADMIN_TASK_FIVE)) {
-            replyToUser = new SendMessage(chatId, "Успешно записано!");
-        }
-        if (botState.equals(BotState.ASK_ADMIN_TASK_SIX)) {
-            replyToUser = new SendMessage(chatId, "Успешно записано!");
-        }
-        return replyToUser;
-    }
 
 }

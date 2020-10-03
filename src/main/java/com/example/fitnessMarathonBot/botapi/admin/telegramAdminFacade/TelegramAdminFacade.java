@@ -113,7 +113,23 @@ public class TelegramAdminFacade {
         final int userId = buttonQuery.getFrom().getId();
         LocaleMessageService localeMessageService;
 
-        return adminMainMenuService.getAdminMainMenuMessage(chatId, "");
+        BotApiMethod<?> callBackAnswer = adminMainMenuService.getAdminMainMenuMessage(chatId, "");
+
+        if (buttonQuery.getData().equals("buttonAddGoal")) {
+            callBackAnswer = new SendMessage(chatId, messagesService.getReplyText("reply.askAdminTimeStampForTask"));
+            userDataCache.setUsersCurrentBotState(userId, BotState.ASK_ADMIN_TASK_ONE);
+
+        } else if (buttonQuery.getData().equals("buttonEditGoal")) {
+            callBackAnswer = new SendMessage(chatId, messagesService.getReplyText("reply.askAdminEditTask"));
+            userDataCache.setUsersCurrentBotState(userId, BotState.ASK_AGE);
+
+        } else if (buttonQuery.getData().equals("buttonDelGoal")) {
+            callBackAnswer = new SendMessage(chatId, messagesService.getReplyText("reply.askAdminDeleteTask"));
+            userDataCache.setUsersCurrentBotState(userId, BotState.ASK_AGE);
+
+        }
+
+        return callBackAnswer;
     }
 
     private AnswerCallbackQuery sendAnswerCallbackQuery(String text, boolean alert, CallbackQuery callbackquery) {
@@ -124,18 +140,4 @@ public class TelegramAdminFacade {
         return answerCallbackQuery;
     }
 
-    @SneakyThrows
-    public File getUsersProfile(int userId) {
-        UserProfileData userProfileData = userDataCache.getUserProfileData(userId);
-        File profileFile = ResourceUtils.getFile("classpath:static/docs/Your_order.TXT");
-
-        try (FileWriter fw = new FileWriter(profileFile.getAbsoluteFile());
-             BufferedWriter bw = new BufferedWriter(fw)) {
-            bw.write(userProfileData.toString());
-        }
-
-
-        return profileFile;
-
-    }
 }

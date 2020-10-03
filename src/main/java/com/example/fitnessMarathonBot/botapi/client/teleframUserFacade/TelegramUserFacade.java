@@ -4,9 +4,8 @@ import com.example.fitnessMarathonBot.bean.Bot;
 import com.example.fitnessMarathonBot.bean.UserProfileData;
 import com.example.fitnessMarathonBot.botapi.BotState;
 import com.example.fitnessMarathonBot.botapi.BotStateContext;
-import com.example.fitnessMarathonBot.botapi.client.buttonHandlers.ButtonHandler;
+import com.example.fitnessMarathonBot.botapi.client.userButtonHandlers.UserButtonHandler;
 import com.example.fitnessMarathonBot.cache.UserDataCache;
-import com.example.fitnessMarathonBot.fitnessDB.bean.ListUserGoals;
 import com.example.fitnessMarathonBot.fitnessDB.service.ListUserGoalsService;
 import com.example.fitnessMarathonBot.fitnessDB.service.UserPhotoService;
 import com.example.fitnessMarathonBot.service.LocaleMessageService;
@@ -48,7 +47,7 @@ public class TelegramUserFacade {
     private ReplyMessagesService messagesService;
 
     @Autowired
-    private ButtonHandler buttonHandler;
+    private UserButtonHandler userButtonHandler;
 
     @Autowired
     private UserPhotoService userPhotoService;
@@ -169,7 +168,7 @@ public class TelegramUserFacade {
             }
 
         } else if (buttonQuery.getData().equals("buttonReportGoals")) {
-            callBackAnswer = buttonHandler.getMessageAndGoalsButton(chatId);
+            callBackAnswer = userButtonHandler.getMessageAndGoalsButton(chatId);
             userDataCache.setUsersCurrentBotState(userId, BotState.ASK_GOALS);
 
         } else if (buttonQuery.getData().equals("buttonTaskOne")) {
