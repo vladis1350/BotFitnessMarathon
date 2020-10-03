@@ -31,6 +31,8 @@ public class BotStateContext {
             return messageHandlers.get(BotState.ASK_SUPPLEMENT_PERSONAL_INFO);
         } else if(isFillingReport(currentState)) {
             return messageHandlers.get(BotState.ASK_REPORT);
+        } else if(isFillingGoals(currentState)) {
+            return messageHandlers.get(BotState.FILLING_GOALS);
         }
 
         return messageHandlers.get(currentState);
@@ -82,6 +84,22 @@ public class BotStateContext {
             case ASK_WAIST:
             case PERSONAL_INFO_FILLED:
             case ASK_SUPPLEMENT_PERSONAL_INFO:
+                return true;
+            default:
+                return false;
+        }
+    }
+
+    private boolean isFillingGoals(BotState currentState) {
+        switch (currentState) {
+            case FILLING_GOALS:
+            case ASK_ADMIN_TASK_FIVE:
+            case ASK_ADMIN_TASK_ONE:
+            case ASK_ADMIN_TASK_FOUR:
+            case ASK_ADMIN_TASK_THREE:
+            case ASK_ADMIN_TASK_TWO:
+            case ASK_ADMIN_TASK_SIX:
+            case GOALS_FILLED:
                 return true;
             default:
                 return false;

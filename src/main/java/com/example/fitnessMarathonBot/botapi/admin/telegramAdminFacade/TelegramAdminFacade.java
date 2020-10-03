@@ -112,13 +112,9 @@ public class TelegramAdminFacade {
         final long chatId = buttonQuery.getMessage().getChatId();
         final int userId = buttonQuery.getFrom().getId();
         LocaleMessageService localeMessageService;
-        BotApiMethod<?> callBackAnswer = adminMainMenuService.getAdminMainMenuMessage(chatId, "");
 
-        return callBackAnswer;
-
-
+        return adminMainMenuService.getAdminMainMenuMessage(chatId, "");
     }
-
 
     private AnswerCallbackQuery sendAnswerCallbackQuery(String text, boolean alert, CallbackQuery callbackquery) {
         AnswerCallbackQuery answerCallbackQuery = new AnswerCallbackQuery();

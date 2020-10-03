@@ -18,15 +18,43 @@ public class RefreshGoalsHandler implements InputMessageHandler {
 
     @Override
     public SendMessage handle(Message message) {
-        final int userId = message.getFrom().getId();
-        final UserProfileData profileData = userDataCache.getUserProfileData(userId);
-
-        userDataCache.setUsersCurrentBotState(userId, BotState.REFRESH_GOALS);
-        return new SendMessage(message.getChatId(), "Обновляем цели");
+        if (userDataCache.getUsersCurrentBotState(message.getFrom().getId()).equals(BotState.REFRESH_GOALS)) {
+            userDataCache.setUsersCurrentBotState(message.getFrom().getId(), BotState.ASK_ADMIN_TASK_ONE);
+        }
+        return processUsersInput(message);
     }
 
     @Override
     public BotState getHandlerName() {
         return BotState.REFRESH_GOALS;
     }
+
+    private SendMessage processUsersInput(Message inputMsg) {
+        String usersAnswer = inputMsg.getText();
+        int userId = inputMsg.getFrom().getId();
+        long chatId = inputMsg.getChatId();
+        SendMessage replyToUser = null;
+        BotState botState = userDataCache.getUsersCurrentBotState(userId);
+
+        if (botState.equals(BotState.ASK_ADMIN_TASK_ONE)) {
+            replyToUser = new SendMessage(chatId, "Успешно записано!");
+        }
+        if (botState.equals(BotState.ASK_ADMIN_TASK_TWO)) {
+            replyToUser = new SendMessage(chatId, "Успешно записано!");
+        }
+        if (botState.equals(BotState.ASK_ADMIN_TASK_THREE)) {
+            replyToUser = new SendMessage(chatId, "Успешно записано!");
+        }
+        if (botState.equals(BotState.ASK_ADMIN_TASK_FOUR)) {
+            replyToUser = new SendMessage(chatId, "Успешно записано!");
+        }
+        if (botState.equals(BotState.ASK_ADMIN_TASK_FIVE)) {
+            replyToUser = new SendMessage(chatId, "Успешно записано!");
+        }
+        if (botState.equals(BotState.ASK_ADMIN_TASK_SIX)) {
+            replyToUser = new SendMessage(chatId, "Успешно записано!");
+        }
+        return replyToUser;
+    }
+
 }
