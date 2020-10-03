@@ -17,8 +17,10 @@ public enum Emojis {
     MEMO(EmojiParser.parseToUnicode(":memo:")),
     HEART(EmojiParser.parseToUnicode(":heart:")),
     TADA(EmojiParser.parseToUnicode(":tada:")),
-    SUNNY(EmojiParser.parseToUnicode(":sunny:")),
-    BLUSH(EmojiParser.parseToUnicode(":blush:"));
+    GRIN(EmojiParser.parseToUnicode(":grin:")),
+    BLUSH(EmojiParser.parseToUnicode(":blush:")),
+    SUNNY(EmojiParser.parseToUnicode(":sunny:"));
+
 
     private String emojiName;
     @Override
