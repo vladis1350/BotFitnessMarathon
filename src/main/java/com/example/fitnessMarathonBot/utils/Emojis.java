@@ -17,14 +17,9 @@ public enum Emojis {
     MEMO(EmojiParser.parseToUnicode(":memo:")),
     HEART(EmojiParser.parseToUnicode(":heart:")),
     TADA(EmojiParser.parseToUnicode(":tada:")),
-    WARNING(EmojiParser.parseToUnicode(":warning:")),
-    ARROW_RIGHT(EmojiParser.parseToUnicode(":arrow_right:")),
-    HEAVY_CHECK_MARK(EmojiParser.parseToUnicode(":heavy_check_mark:")),
     GRIN(EmojiParser.parseToUnicode(":grin:")),
     BLUSH(EmojiParser.parseToUnicode(":blush:")),
-    NO_ENTRY_SIGN(EmojiParser.parseToUnicode(":no_entry_sign:")),
-    SUNNY(EmojiParser.parseToUnicode(":sunny:")),
-    BLUSH(EmojiParser.parseToUnicode(":blush:"));
+    SUNNY(EmojiParser.parseToUnicode(":sunny:"));
 
 
     private String emojiName;
