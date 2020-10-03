@@ -29,14 +29,29 @@ public class BotStateContext {
             return messageHandlers.get(BotState.ASK_PERSONAL_INFO);
         } else if (isSupplementProfileState(currentState)) {
             return messageHandlers.get(BotState.ASK_SUPPLEMENT_PERSONAL_INFO);
+
+        } else if(isFillingReport(currentState)) {
+            return messageHandlers.get(BotState.ASK_REPORT);
+        } else if(isFillingGoals(currentState)) {
+            return messageHandlers.get(BotState.FILLING_GOALS);
         } else if (isFillingMarathonState(currentState)) {
             return messageHandlers.get(BotState.START_NEW_MARATHON);
         }
-
         return messageHandlers.get(currentState);
     }
 
-    private boolean isFillingProfileState(BotState currentState) {
+        private boolean isFillingMarathonState(BotState currentState) {
+            switch (currentState) {
+                case START_NEW_MARATHON:
+                case ASK_DATE_START_MARATHON:
+                case ASK_DATE_FINISH_MARATHON:
+                    return true;
+                default:
+                    return false;
+            }
+        }
+
+        private boolean isFillingProfileState(BotState currentState) {
         switch (currentState) {
             case ASK_NAME:
             case ASK_HEIGHT:
@@ -44,6 +59,25 @@ public class BotStateContext {
             case ASK_AGE:
             case ASK_PERSONAL_INFO:
             case PROFILE_FILLED:
+                return true;
+            default:
+                return false;
+        }
+    }
+
+    private boolean isFillingReport(BotState currentState){
+
+        switch (currentState) {
+            case ASK_REPORT:
+            case ASK_GOALS:
+            case ASK_PHOTO:
+            case ASK_TASK_ONE:
+            case ASK_TASK_TWO:
+            case ASK_TASK_THREE:
+            case ASK_TASK_FOUR:
+            case ASK_TASK_FIVE:
+            case ASK_TASK_SIX:
+            case FILLING_REPORT:
                 return true;
             default:
                 return false;
@@ -73,6 +107,22 @@ public class BotStateContext {
             case START_NEW_MARATHON:
             case ASK_DATE_START_MARATHON:
             case ASK_DATE_FINISH_MARATHON:
+                return true;
+            default:
+                return false;
+        }
+    }
+
+    private boolean isFillingGoals(BotState currentState) {
+        switch (currentState) {
+            case FILLING_GOALS:
+            case ASK_ADMIN_TASK_FIVE:
+            case ASK_ADMIN_TASK_ONE:
+            case ASK_ADMIN_TASK_FOUR:
+            case ASK_ADMIN_TASK_THREE:
+            case ASK_ADMIN_TASK_TWO:
+            case ASK_ADMIN_TASK_SIX:
+            case GOALS_FILLED:
                 return true;
             default:
                 return false;

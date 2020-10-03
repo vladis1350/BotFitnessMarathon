@@ -35,4 +35,13 @@ public class User implements Serializable {
     @EqualsAndHashCode.Exclude
     private Set<UserProfile> userProfiles;
 
+    @OneToMany(fetch = FetchType.EAGER, mappedBy = "user", cascade = CascadeType.ALL)
+    @ToString.Exclude
+    @EqualsAndHashCode.Exclude
+    private Set<UserPhoto> userPhotos;
+
+    @OneToMany(fetch = FetchType.EAGER, mappedBy = "user", cascade = CascadeType.ALL)
+    @ToString.Exclude
+    @EqualsAndHashCode.Exclude
+    private Set<ListUserGoals> listUserGoals;
 }

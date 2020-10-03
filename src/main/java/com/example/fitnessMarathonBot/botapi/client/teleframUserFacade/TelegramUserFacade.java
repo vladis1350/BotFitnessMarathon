@@ -4,14 +4,19 @@ import com.example.fitnessMarathonBot.bean.Bot;
 import com.example.fitnessMarathonBot.bean.UserProfileData;
 import com.example.fitnessMarathonBot.botapi.BotState;
 import com.example.fitnessMarathonBot.botapi.BotStateContext;
+import com.example.fitnessMarathonBot.botapi.client.buttonHandlers.ButtonHandler;
 import com.example.fitnessMarathonBot.cache.UserDataCache;
+import com.example.fitnessMarathonBot.fitnessDB.bean.ListUserGoals;
+import com.example.fitnessMarathonBot.fitnessDB.service.ListUserGoalsService;
+import com.example.fitnessMarathonBot.fitnessDB.service.UserPhotoService;
 import com.example.fitnessMarathonBot.service.LocaleMessageService;
-import com.example.fitnessMarathonBot.service.UserMainMenuService;
 import com.example.fitnessMarathonBot.service.ReplyMessagesService;
+import com.example.fitnessMarathonBot.service.UserMainMenuService;
 import lombok.Getter;
 import lombok.Setter;
 import lombok.SneakyThrows;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Lazy;
 import org.springframework.stereotype.Component;
 import org.springframework.util.ResourceUtils;
@@ -20,15 +25,17 @@ import org.telegram.telegrambots.meta.api.methods.BotApiMethod;
 import org.telegram.telegrambots.meta.api.methods.send.SendMessage;
 import org.telegram.telegrambots.meta.api.objects.CallbackQuery;
 import org.telegram.telegrambots.meta.api.objects.Message;
+import org.telegram.telegrambots.meta.api.objects.PhotoSize;
 import org.telegram.telegrambots.meta.api.objects.Update;
 
 import java.io.BufferedWriter;
 import java.io.File;
 import java.io.FileWriter;
+import java.util.Comparator;
+import java.util.List;
+import java.util.Objects;
 
-/**
- * @author get inspired by Sergei Viacheslaev's video
- */
+
 @Component
 @Slf4j
 @Getter
@@ -40,6 +47,14 @@ public class TelegramUserFacade {
     private Bot myBot;
     private ReplyMessagesService messagesService;
 
+    @Autowired
+    private ButtonHandler buttonHandler;
+
+    @Autowired
+    private UserPhotoService userPhotoService;
+
+    @Autowired
+    private ListUserGoalsService listUserGoalsService;
 
     public TelegramUserFacade(BotStateContext botStateContext, UserDataCache userDataCache, UserMainMenuService userMainMenuService,
                               @Lazy Bot myBot, ReplyMessagesService messagesService) {
@@ -66,9 +81,29 @@ public class TelegramUserFacade {
             log.info("New message from User:{}, userId: {}, chatId: {},  with text: {}",
                     message.getFrom().getUserName(), message.getFrom().getId(), message.getChatId(), message.getText());
             replyMessage = handleInputMessage(message);
+        } else if (message != null && message.hasPhoto()) {
+            long chatId = update.getMessage().getChatId();
+            List<PhotoSize> photos = update.getMessage().getPhoto();
+            String photo_id = Objects.requireNonNull(photos.stream().max(Comparator.comparing(PhotoSize::getFileSize))
+                    .orElse(null)).getFileId();
+            log.info("New photo from User:{}, userId: {}, chatId: {},  photo_id: {}",
+                    message.getFrom().getUserName(), message.getFrom().getId(), message.getChatId(), photo_id);
+            replyMessage = counterOfSentPhotos(message);
         }
 
         return replyMessage;
+    }
+
+    private SendMessage counterOfSentPhotos(Message message) {
+        SendMessage sendMessage = new SendMessage();
+        sendMessage.setChatId(message.getChatId());
+        int count = userPhotoService.saveUserPhoto(message);
+        if (count >= 2) {
+            sendMessage.setText(messagesService.getReplyText("reply.allPhotoSent"));
+        } else {
+            sendMessage.setText(String.format(messagesService.getReplyText("reply.askPhoto"), 2 - count));
+        }
+        return sendMessage;
     }
 
     private SendMessage handleInputMessage(Message message) {
@@ -118,10 +153,54 @@ public class TelegramUserFacade {
         if (buttonQuery.getData().equals("buttonInputPersonalInfo")) {
             callBackAnswer = new SendMessage(chatId, messagesService.getReplyText("reply.askName"));
             userDataCache.setUsersCurrentBotState(userId, BotState.ASK_AGE);
+
         } else if (buttonQuery.getData().equals("buttonPersonalInfo")) {
             callBackAnswer = new SendMessage(chatId, messagesService.getReplyText("reply.askNeck"));
             userDataCache.setUsersCurrentBotState(userId, BotState.ASK_ARM);
+
+        } else if (buttonQuery.getData().equals("buttonReportPhoto")) {
+            int count = userPhotoService.getCountUserPhotos(chatId);
+            if (count == 3) {
+                callBackAnswer = new SendMessage(chatId, messagesService.getReplyText("reply.allPhotoSent"));
+            } else {
+                callBackAnswer = new SendMessage(chatId,
+                        String.format(messagesService.getReplyText("reply.askPhoto"), 3 - count));
+                userDataCache.setUsersCurrentBotState(userId, BotState.ASK_PHOTO);
+            }
+
+        } else if (buttonQuery.getData().equals("buttonReportGoals")) {
+            callBackAnswer = buttonHandler.getMessageAndGoalsButton(chatId);
+            userDataCache.setUsersCurrentBotState(userId, BotState.ASK_GOALS);
+
+        } else if (buttonQuery.getData().equals("buttonTaskOne")) {
+            listUserGoalsService.markTargetOne(chatId);
+            callBackAnswer = new SendMessage(chatId, "Успешно записано!");
+            userDataCache.setUsersCurrentBotState(userId, BotState.ASK_TASK_ONE);
+
+        } else if (buttonQuery.getData().equals("buttonTaskTwo")) {
+            listUserGoalsService.markTargetTwo(chatId);
+            callBackAnswer = new SendMessage(chatId, "Успешно записано!");
+            userDataCache.setUsersCurrentBotState(userId, BotState.ASK_TASK_TWO);
+
+        } else if (buttonQuery.getData().equals("buttonTaskThree")) {
+            listUserGoalsService.markTargetThree(chatId);
+            callBackAnswer = new SendMessage(chatId, "Успешно записано!");
+            userDataCache.setUsersCurrentBotState(userId, BotState.ASK_TASK_THREE);
+
+        } else if (buttonQuery.getData().equals("buttonTaskFour")) {
+            listUserGoalsService.markTargetFour(chatId);
+            callBackAnswer = new SendMessage(chatId, "Успешно записано!");
+            userDataCache.setUsersCurrentBotState(userId, BotState.ASK_TASK_FOUR);
+        } else if (buttonQuery.getData().equals("buttonTaskFive")) {
+            listUserGoalsService.markTargetFive(chatId);
+            callBackAnswer = new SendMessage(chatId, "Успешно записано!");
+            userDataCache.setUsersCurrentBotState(userId, BotState.ASK_TASK_FIVE);
+        } else if (buttonQuery.getData().equals("buttonTaskSix")) {
+            listUserGoalsService.markTargetSix(chatId);
+            callBackAnswer = new SendMessage(chatId, "Успешно записано!");
+            userDataCache.setUsersCurrentBotState(userId, BotState.ASK_TASK_SIX);
         }
+
 
         return callBackAnswer;
 

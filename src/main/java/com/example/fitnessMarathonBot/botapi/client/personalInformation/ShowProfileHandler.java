@@ -65,8 +65,8 @@ public class ShowProfileHandler implements InputMessageHandler {
                     userProfile.getPk().getBodyParam().getArm(), userProfile.getPk().getBodyParam().getStomach(),
                     userProfile.getPk().getBodyParam().getNeck(), userProfile.getPk().getBodyParam().getHips(),
                     userProfile.getPk().getBodyParam().getHip(), userProfile.getPk().getBodyParam().getChest(),
-                    userProfile.getPk().getBodyParam().getWaist(), userProfile.getPk().getBodyParam().getShin(), userProfile.getPk().getBodyParam().getDate());
-
+                    userProfile.getPk().getBodyParam().getWaist(), userProfile.getPk().getBodyParam().getShin(),
+                    userProfile.getPk().getBodyParam().getDate()).replaceAll("null", "0");
             sendMessage = new SendMessage(chatId, profileInfo).setReplyMarkup(getInlineMessageButtons());
         }
         return sendMessage;
