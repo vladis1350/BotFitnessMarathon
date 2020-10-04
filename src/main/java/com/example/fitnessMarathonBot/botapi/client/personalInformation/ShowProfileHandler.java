@@ -30,8 +30,6 @@ import java.util.List;
  */
 @Component
 public class ShowProfileHandler implements InputMessageHandler {
-    private UserDataCache userDataCache;
-    private Bot myBot;
 
     @Autowired
     private ReplyMessagesService messagesService;
@@ -40,14 +38,10 @@ public class ShowProfileHandler implements InputMessageHandler {
     private UserProfileImpl userProfileRepo;
 
     @Autowired
-    private BodyParamRepositoryImpl bodyParamRepository;
-
-    @Autowired
     private UserRepositoryImpl userRepository;
 
-    public ShowProfileHandler(UserDataCache userDataCache, @Lazy Bot myBot) {
-        this.userDataCache = userDataCache;
-        this.myBot = myBot;
+    public ShowProfileHandler() {
+
     }
 
     @Override

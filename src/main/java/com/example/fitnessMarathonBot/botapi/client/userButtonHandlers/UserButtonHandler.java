@@ -1,7 +1,6 @@
-package com.example.fitnessMarathonBot.botapi.client.buttonHandlers;
+package com.example.fitnessMarathonBot.botapi.client.userButtonHandlers;
 
 import com.example.fitnessMarathonBot.fitnessDB.bean.ListGoals;
-import com.example.fitnessMarathonBot.fitnessDB.bean.ListUserGoals;
 import com.example.fitnessMarathonBot.fitnessDB.repository.ListGoalsRepository;
 import com.example.fitnessMarathonBot.fitnessDB.repository.ListUserGoalsRepository;
 import com.example.fitnessMarathonBot.service.ReplyMessagesService;
@@ -17,7 +16,7 @@ import java.util.Date;
 import java.util.List;
 
 @Component
-public class ButtonHandler {
+public class UserButtonHandler {
 
     @Autowired
     private ListGoalsRepository listGoalsRepository;
