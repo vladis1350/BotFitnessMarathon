@@ -15,7 +15,7 @@
 	<description>FitnessMarathonBot</description>
 
 	<properties>
-		<java.version>11</java.version>
+		<java.version>8</java.version>
 	</properties>
 
 	<dependencies>
@@ -84,12 +84,12 @@
 				<artifactId>heroku-maven-plugin</artifactId>
 				<version>3.0.4</version>
 				<configuration>
-					<appName>fitness-marathon</appName>
+					<appName>fitness-marathon2</appName>
 					<includeTarget>false</includeTarget>
 					<includes>
 						<include>${project.build.directory}/${project.build.finalName}.jar</include>
 					</includes>
-					<jdkVersion>11</jdkVersion>
+					<jdkVersion>8</jdkVersion>
 					<processTypes>
 						<web>java $JAVA_OPTS -jar
 							${project.build.directory}/${project.build.finalName}.jar</web>
