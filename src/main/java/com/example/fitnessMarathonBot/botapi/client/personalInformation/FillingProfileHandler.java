@@ -108,74 +108,90 @@ public class FillingProfileHandler implements InputMessageHandler {
             userDataCache.setUsersCurrentBotState(userId, BotState.ASK_HEIGHT);
         }
         if (botState.equals(BotState.ASK_HEIGHT)) {
-            user = userRepository.findUserByChatId(chatId);
-            if (userProfileImpl.findUserProfileByPkUser(user) != null) {
-                userProfile = userProfileImpl.findUserProfileByPkUser(user);
-                userProfile.setUserAge(usersAnswer);
-                userProfileImpl.save(userProfile);
-            } else {
-                userProfile = new UserProfile();
-                userProfile.setUserAge(usersAnswer);
-                userProfileImpl.save(userProfile);
-            }
+            if (userAnswerIsCorrect(usersAnswer)) {
+                user = userRepository.findUserByChatId(chatId);
+                if (userProfileImpl.findUserProfileByPkUser(user) != null) {
+                    userProfile = userProfileImpl.findUserProfileByPkUser(user);
+                    userProfile.setUserAge(usersAnswer);
+                    userProfileImpl.save(userProfile);
+                } else {
+                    userProfile = new UserProfile();
+                    userProfile.setUserAge(usersAnswer);
+                    userProfileImpl.save(userProfile);
+                }
                 replyToUser = messagesService.getReplyMessage(chatId, "reply.askHeight");
                 userDataCache.setUsersCurrentBotState(userId, BotState.ASK_WEIGHT);
+            } else {
+                replyToUser = messagesService.getReplyMessage(chatId, "reply.askAge");
+                userDataCache.setUsersCurrentBotState(userId, BotState.ASK_HEIGHT);
+            }
         }
         if (botState.equals(BotState.ASK_WEIGHT)) {
-            user = userRepository.findUserByChatId(chatId);
-            if (bodyParamRepository.findBodyParamByUser(user) != null) {
-                bodyParam = bodyParamRepository.findBodyParamByUser(user);
-                bodyParam.setHeight(usersAnswer);
-                bodyParamRepository.save(bodyParam);
+            if (userAnswerIsCorrect(usersAnswer)) {
+                user = userRepository.findUserByChatId(chatId);
+                if (bodyParamRepository.findBodyParamByUser(user) != null) {
+                    bodyParam = bodyParamRepository.findBodyParamByUser(user);
+                    bodyParam.setHeight(usersAnswer);
+                    bodyParamRepository.save(bodyParam);
+                } else {
+                    bodyParam = new BodyParam();
+                    bodyParam.setHeight(usersAnswer);
+                    bodyParamRepository.save(bodyParam);
+                }
+                replyToUser = messagesService.getReplyMessage(chatId, "reply.askWeight");
+                userDataCache.setUsersCurrentBotState(userId, BotState.PROFILE_FILLED);
             } else {
-                bodyParam = new BodyParam();
-                bodyParam.setHeight(usersAnswer);
-                bodyParamRepository.save(bodyParam);
+                replyToUser = messagesService.getReplyMessage(chatId, "reply.askHeight");
+                userDataCache.setUsersCurrentBotState(userId, BotState.ASK_WEIGHT);
             }
-            replyToUser = messagesService.getReplyMessage(chatId, "reply.askWeight");
-            userDataCache.setUsersCurrentBotState(userId, BotState.PROFILE_FILLED);
         }
         if (botState.equals(BotState.PROFILE_FILLED)) {
             Date date = new Date();
             SimpleDateFormat formatForDateNow = new SimpleDateFormat("dd.MM.yyyy");
-            user = userRepository.findUserByChatId(chatId);
-            if (bodyParamRepository.findBodyParamByUser(user) != null) {
-                bodyParam = bodyParamRepository.findBodyParamByUser(user);
-                bodyParam.setWeight(usersAnswer);
-                bodyParam.setUser(userRepository.findUserByChatId(inputMsg.getChatId()));
-                bodyParam.setDate(formatForDateNow.format(date));
-                bodyParamRepository.save(bodyParam);
-                userProfilesId.setUser(user);
-                userProfilesId.setBodyParam(bodyParam);
-                if (userProfileImpl.findUserProfileByPkUser(user) != null) {
-                    userProfile = userProfileImpl.findUserProfileByPkUser(user);
-                    userProfile.setPk(userProfilesId);
-                    userProfileImpl.save(userProfile);
+            if (userAnswerIsCorrect(usersAnswer)) {
+                user = userRepository.findUserByChatId(chatId);
+                if (bodyParamRepository.findBodyParamByUser(user) != null) {
+                    bodyParam = bodyParamRepository.findBodyParamByUser(user);
+                    bodyParam.setWeight(usersAnswer);
+                    bodyParam.setUser(userRepository.findUserByChatId(inputMsg.getChatId()));
+                    bodyParam.setDate(formatForDateNow.format(date));
+                    bodyParamRepository.save(bodyParam);
+                    userProfilesId.setUser(user);
+                    userProfilesId.setBodyParam(bodyParam);
+                    if (userProfileImpl.findUserProfileByPkUser(user) != null) {
+                        userProfile = userProfileImpl.findUserProfileByPkUser(user);
+                        userProfile.setPk(userProfilesId);
+                        userProfileImpl.save(userProfile);
+                    } else {
+                        userProfile.setPk(userProfilesId);
+                        userProfileImpl.save(userProfile);
+                    }
                 } else {
+                    bodyParam = BodyParam.builder()
+                            .weight(usersAnswer)
+                            .user(userRepository.findUserByChatId(inputMsg.getChatId()))
+                            .date(formatForDateNow.format(date))
+                            .build();
+                    bodyParamRepository.save(bodyParam);
+                    userProfilesId.setUser(user);
+                    userProfilesId.setBodyParam(bodyParam);
+                    userProfile = new UserProfile();
                     userProfile.setPk(userProfilesId);
                     userProfileImpl.save(userProfile);
                 }
+                try {
+                    myBot.execute(new SendMessage(inputMsg.getChatId(), messagesService.getReplyText("reply.profileFilled"))
+                            .setReplyMarkup(userMainMenuService.getUserMainMenuKeyboard()));
+                } catch (TelegramApiException e) {
+                    e.printStackTrace();
+                }
+//                myBot.sendClientMealPlan(inputMsg.getChatId());
+                userDataCache.setUsersCurrentBotState(userId, BotState.MAIN_MENU);
             } else {
-                bodyParam = BodyParam.builder()
-                        .weight(usersAnswer)
-                        .user(userRepository.findUserByChatId(inputMsg.getChatId()))
-                        .date(formatForDateNow.format(date))
-                        .build();
-                bodyParamRepository.save(bodyParam);
-                userProfilesId.setUser(user);
-                userProfilesId.setBodyParam(bodyParam);
-                userProfile = new UserProfile();
-                userProfile.setPk(userProfilesId);
-                userProfileImpl.save(userProfile);
+                replyToUser = messagesService.getReplyMessage(chatId, "reply.askWeight");
+                userDataCache.setUsersCurrentBotState(userId, BotState.PROFILE_FILLED);
             }
-            try {
-                myBot.execute(new SendMessage(inputMsg.getChatId(), messagesService.getReplyText("reply.profileFilled"))
-                        .setReplyMarkup(userMainMenuService.getUserMainMenuKeyboard()));
-            } catch (TelegramApiException e) {
-                e.printStackTrace();
-            }
-            myBot.sendClientMealPlan(inputMsg.getChatId());
-            userDataCache.setUsersCurrentBotState(userId, BotState.MAIN_MENU);
+
         }
 
         userDataCache.saveUserProfileData(userId, profileData);
@@ -183,7 +199,7 @@ public class FillingProfileHandler implements InputMessageHandler {
     }
 
     private boolean userAnswerIsCorrect(String userAnswer) {
-        return userAnswer.matches("[-+]?[0-9]*\\.?[0-9]+([eE][-+]?[0-9]+)?");
+        return userAnswer.matches("[-+]?[0-9]*(\\.|,|)?[0-9]+([eE][-+]?[0-9]+)?");
     }
 
 }

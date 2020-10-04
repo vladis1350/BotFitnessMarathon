@@ -31,7 +31,6 @@ public class UserPhotoService {
             List<UserPhoto> userPhotos = userPhotoRepository.findUserPhotoByTimeStampAndUser(
                     formatForDateNow.format(date), user);
             if (userPhotos != null && userPhotos.size() <= 2) {
-                System.out.println(userPhotos.size());
                 List<PhotoSize> photos = message.getPhoto();
                 String photo_id = Objects.requireNonNull(photos.stream().max(Comparator.comparing(PhotoSize::getFileSize))
                         .orElse(null)).getFileId();

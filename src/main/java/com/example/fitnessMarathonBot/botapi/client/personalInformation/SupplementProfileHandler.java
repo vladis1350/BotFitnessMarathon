@@ -54,93 +54,136 @@ public class SupplementProfileHandler implements InputMessageHandler {
         BotState botState = userDataCache.getUsersCurrentBotState(userId);
 
         if (botState.equals(BotState.ASK_ARM)) {
-            System.out.println("+++++++");
-            User user = userRepository.findUserByChatId(inputMsg.getChatId());
-            if (bodyParamRepository.findBodyParamByUser(user) != null) {
-                BodyParam bodyParam = bodyParamRepository.findBodyParamByUser(user);
-                bodyParam.setNeck(usersAnswer);
-                bodyParamRepository.save(bodyParam);
+            if(userAnswerIsCorrect(usersAnswer)) {
+                User user = userRepository.findUserByChatId(inputMsg.getChatId());
+                if (bodyParamRepository.findBodyParamByUser(user) != null) {
+                    BodyParam bodyParam = bodyParamRepository.findBodyParamByUser(user);
+                    bodyParam.setNeck(usersAnswer);
+                    bodyParamRepository.save(bodyParam);
+                }
+                replyToUser = messagesService.getReplyMessage(chatId, "reply.askArm");
+                userDataCache.setUsersCurrentBotState(userId, BotState.ASK_CHEST);
+            } else {
+                replyToUser = messagesService.getReplyMessage(chatId, "reply.askNeck");
+                userDataCache.setUsersCurrentBotState(userId, BotState.ASK_ARM);
             }
-            replyToUser = messagesService.getReplyMessage(chatId, "reply.askArm");
-            userDataCache.setUsersCurrentBotState(userId, BotState.ASK_CHEST);
         }
         if (botState.equals(BotState.ASK_CHEST)) {
-            User user = userRepository.findUserByChatId(inputMsg.getChatId());
-            if (bodyParamRepository.findBodyParamByUser(user) != null) {
-                BodyParam bodyParam = bodyParamRepository.findBodyParamByUser(user);
-                bodyParam.setArm(usersAnswer);
-                bodyParamRepository.save(bodyParam);
+            if(userAnswerIsCorrect(usersAnswer)) {
+                User user = userRepository.findUserByChatId(inputMsg.getChatId());
+                if (bodyParamRepository.findBodyParamByUser(user) != null) {
+                    BodyParam bodyParam = bodyParamRepository.findBodyParamByUser(user);
+                    bodyParam.setArm(usersAnswer);
+                    bodyParamRepository.save(bodyParam);
+                }
+                replyToUser = messagesService.getReplyMessage(chatId, "reply.askChest");
+                userDataCache.setUsersCurrentBotState(userId, BotState.ASK_WAIST);
+            } else {
+                replyToUser = messagesService.getReplyMessage(chatId, "reply.askArm");
+                userDataCache.setUsersCurrentBotState(userId, BotState.ASK_CHEST);
             }
-            replyToUser = messagesService.getReplyMessage(chatId, "reply.askChest");
-            userDataCache.setUsersCurrentBotState(userId, BotState.ASK_WAIST);
         }
         if (botState.equals(BotState.ASK_WAIST)) {
-            User user = userRepository.findUserByChatId(inputMsg.getChatId());
-            if (bodyParamRepository.findBodyParamByUser(user) != null) {
-                BodyParam bodyParam = bodyParamRepository.findBodyParamByUser(user);
-                bodyParam.setChest(usersAnswer);
-                bodyParamRepository.save(bodyParam);
+            if(userAnswerIsCorrect(usersAnswer)) {
+                User user = userRepository.findUserByChatId(inputMsg.getChatId());
+                if (bodyParamRepository.findBodyParamByUser(user) != null) {
+                    BodyParam bodyParam = bodyParamRepository.findBodyParamByUser(user);
+                    bodyParam.setChest(usersAnswer);
+                    bodyParamRepository.save(bodyParam);
+                }
+                replyToUser = messagesService.getReplyMessage(chatId, "reply.askWaist");
+                userDataCache.setUsersCurrentBotState(userId, BotState.ASK_BELLY);
+            } else {
+                replyToUser = messagesService.getReplyMessage(chatId, "reply.askChest");
+                userDataCache.setUsersCurrentBotState(userId, BotState.ASK_WAIST);
             }
-            replyToUser = messagesService.getReplyMessage(chatId, "reply.askWaist");
-            userDataCache.setUsersCurrentBotState(userId, BotState.ASK_BELLY);
 
         }
         if (botState.equals(BotState.ASK_BELLY)) {
-            User user = userRepository.findUserByChatId(inputMsg.getChatId());
-            if (bodyParamRepository.findBodyParamByUser(user) != null) {
-                BodyParam bodyParam = bodyParamRepository.findBodyParamByUser(user);
-                bodyParam.setWaist(usersAnswer);
-                bodyParamRepository.save(bodyParam);
+            if(userAnswerIsCorrect(usersAnswer)) {
+                User user = userRepository.findUserByChatId(inputMsg.getChatId());
+                if (bodyParamRepository.findBodyParamByUser(user) != null) {
+                    BodyParam bodyParam = bodyParamRepository.findBodyParamByUser(user);
+                    bodyParam.setWaist(usersAnswer);
+                    bodyParamRepository.save(bodyParam);
+                }
+                replyToUser = messagesService.getReplyMessage(chatId, "reply.askBelly");
+                userDataCache.setUsersCurrentBotState(userId, BotState.ASK_HIPS);
+            } else {
+                replyToUser = messagesService.getReplyMessage(chatId, "reply.askWaist");
+                userDataCache.setUsersCurrentBotState(userId, BotState.ASK_BELLY);
             }
-            replyToUser = messagesService.getReplyMessage(chatId, "reply.askBelly");
-            userDataCache.setUsersCurrentBotState(userId, BotState.ASK_HIPS);
 
         }
         if (botState.equals(BotState.ASK_HIPS)) {
-            User user = userRepository.findUserByChatId(inputMsg.getChatId());
-            if (bodyParamRepository.findBodyParamByUser(user) != null) {
-                BodyParam bodyParam = bodyParamRepository.findBodyParamByUser(user);
-                bodyParam.setStomach(usersAnswer);
-                bodyParamRepository.save(bodyParam);
+            if(userAnswerIsCorrect(usersAnswer)) {
+                User user = userRepository.findUserByChatId(inputMsg.getChatId());
+                if (bodyParamRepository.findBodyParamByUser(user) != null) {
+                    BodyParam bodyParam = bodyParamRepository.findBodyParamByUser(user);
+                    bodyParam.setStomach(usersAnswer);
+                    bodyParamRepository.save(bodyParam);
+                }
+                replyToUser = messagesService.getReplyMessage(chatId, "reply.askThighs");
+                userDataCache.setUsersCurrentBotState(userId, BotState.ASK_HIP);
+            } else {
+                replyToUser = messagesService.getReplyMessage(chatId, "reply.askBelly");
+                userDataCache.setUsersCurrentBotState(userId, BotState.ASK_HIPS);
             }
-            replyToUser = messagesService.getReplyMessage(chatId, "reply.askThighs");
-            userDataCache.setUsersCurrentBotState(userId, BotState.ASK_HIP);
         }
         if (botState.equals(BotState.ASK_HIP)) {
-            User user = userRepository.findUserByChatId(inputMsg.getChatId());
-            if (bodyParamRepository.findBodyParamByUser(user) != null) {
-                BodyParam bodyParam = bodyParamRepository.findBodyParamByUser(user);
-                bodyParam.setHips(usersAnswer);
-                bodyParamRepository.save(bodyParam);
+            if(userAnswerIsCorrect(usersAnswer)) {
+                User user = userRepository.findUserByChatId(inputMsg.getChatId());
+                if (bodyParamRepository.findBodyParamByUser(user) != null) {
+                    BodyParam bodyParam = bodyParamRepository.findBodyParamByUser(user);
+                    bodyParam.setHips(usersAnswer);
+                    bodyParamRepository.save(bodyParam);
+                }
+                replyToUser = messagesService.getReplyMessage(chatId, "reply.askThigh");
+                userDataCache.setUsersCurrentBotState(userId, BotState.ASK_SHIN);
+            } else {
+                replyToUser = messagesService.getReplyMessage(chatId, "reply.askThighs");
+                userDataCache.setUsersCurrentBotState(userId, BotState.ASK_HIP);
             }
-            replyToUser = messagesService.getReplyMessage(chatId, "reply.askThigh");
-            userDataCache.setUsersCurrentBotState(userId, BotState.ASK_SHIN);
         }
         if (botState.equals(BotState.ASK_SHIN)) {
-            User user = userRepository.findUserByChatId(inputMsg.getChatId());
-            if (bodyParamRepository.findBodyParamByUser(user) != null) {
-                BodyParam bodyParam = bodyParamRepository.findBodyParamByUser(user);
-                bodyParam.setHip(usersAnswer);
-                bodyParamRepository.save(bodyParam);
+            if(userAnswerIsCorrect(usersAnswer)) {
+                User user = userRepository.findUserByChatId(inputMsg.getChatId());
+                if (bodyParamRepository.findBodyParamByUser(user) != null) {
+                    BodyParam bodyParam = bodyParamRepository.findBodyParamByUser(user);
+                    bodyParam.setHip(usersAnswer);
+                    bodyParamRepository.save(bodyParam);
+                }
+                replyToUser = messagesService.getReplyMessage(chatId, "reply.askShin");
+                userDataCache.setUsersCurrentBotState(userId, BotState.PERSONAL_INFO_FILLED);
+            } else {
+                replyToUser = messagesService.getReplyMessage(chatId, "reply.askThigh");
+                userDataCache.setUsersCurrentBotState(userId, BotState.ASK_SHIN);
             }
-            replyToUser = messagesService.getReplyMessage(chatId, "reply.askShin");
-            userDataCache.setUsersCurrentBotState(userId, BotState.PERSONAL_INFO_FILLED);
         }
         if (botState.equals(BotState.PERSONAL_INFO_FILLED)) {
-            User user = userRepository.findUserByChatId(inputMsg.getChatId());
-            Date date = new Date();
-            SimpleDateFormat formatForDateNow = new SimpleDateFormat("dd.MM.yyyy");
-            if (bodyParamRepository.findBodyParamByUser(user) != null) {
-                BodyParam bodyParam = bodyParamRepository.findBodyParamByUser(user);
-                bodyParam.setShin(usersAnswer);
-                bodyParam.setDate(formatForDateNow.format(date));
-                bodyParamRepository.save(bodyParam);
+            if(userAnswerIsCorrect(usersAnswer)) {
+                User user = userRepository.findUserByChatId(inputMsg.getChatId());
+                Date date = new Date();
+                SimpleDateFormat formatForDateNow = new SimpleDateFormat("dd.MM.yyyy");
+                if (bodyParamRepository.findBodyParamByUser(user) != null) {
+                    BodyParam bodyParam = bodyParamRepository.findBodyParamByUser(user);
+                    bodyParam.setShin(usersAnswer);
+                    bodyParam.setDate(formatForDateNow.format(date));
+                    bodyParamRepository.save(bodyParam);
+                }
+                replyToUser = messagesService.getReplyMessage(chatId, "reply.personalInfoFilled");
+                userDataCache.setUsersCurrentBotState(userId, BotState.MAIN_MENU);
+            } else {
+                replyToUser = messagesService.getReplyMessage(chatId, "reply.askShin");
+                userDataCache.setUsersCurrentBotState(userId, BotState.PERSONAL_INFO_FILLED);
             }
-            replyToUser = messagesService.getReplyMessage(chatId, "reply.personalInfoFilled");
-            userDataCache.setUsersCurrentBotState(userId, BotState.MAIN_MENU);
         }
 
         return replyToUser;
+    }
+
+    private boolean userAnswerIsCorrect(String userAnswer) {
+        return userAnswer.matches("[-+]?[0-9]*(\\.|,|)?[0-9]+([eE][-+]?[0-9]+)?");
     }
 
 }

@@ -100,7 +100,7 @@ public class TelegramUserFacade {
         if (count >= 2) {
             sendMessage.setText(messagesService.getReplyText("reply.allPhotoSent"));
         } else {
-            sendMessage.setText(String.format(messagesService.getReplyText("reply.askPhoto"), 2 - count));
+            sendMessage.setText("Фото принято!");
         }
         return sendMessage;
     }
@@ -159,11 +159,11 @@ public class TelegramUserFacade {
 
         } else if (buttonQuery.getData().equals("buttonReportPhoto")) {
             int count = userPhotoService.getCountUserPhotos(chatId);
+
             if (count == 3) {
                 callBackAnswer = new SendMessage(chatId, messagesService.getReplyText("reply.allPhotoSent"));
-            } else {
-                callBackAnswer = new SendMessage(chatId,
-                        String.format(messagesService.getReplyText("reply.askPhoto"), 3 - count));
+            } else if (count == 0){
+                callBackAnswer = new SendMessage(chatId, String.format(messagesService.getReplyText("reply.askPhoto"), 3 - count));
                 userDataCache.setUsersCurrentBotState(userId, BotState.ASK_PHOTO);
             }
 
@@ -173,30 +173,30 @@ public class TelegramUserFacade {
 
         } else if (buttonQuery.getData().equals("buttonTaskOne")) {
             listUserGoalsService.markTargetOne(chatId);
-            callBackAnswer = new SendMessage(chatId, "Успешно записано!");
+            callBackAnswer =sendAnswerCallbackQuery("Успешно записано!", true, buttonQuery);
             userDataCache.setUsersCurrentBotState(userId, BotState.ASK_TASK_ONE);
 
         } else if (buttonQuery.getData().equals("buttonTaskTwo")) {
             listUserGoalsService.markTargetTwo(chatId);
-            callBackAnswer = new SendMessage(chatId, "Успешно записано!");
+            callBackAnswer =sendAnswerCallbackQuery("Успешно записано!", true, buttonQuery);
             userDataCache.setUsersCurrentBotState(userId, BotState.ASK_TASK_TWO);
 
         } else if (buttonQuery.getData().equals("buttonTaskThree")) {
             listUserGoalsService.markTargetThree(chatId);
-            callBackAnswer = new SendMessage(chatId, "Успешно записано!");
+            callBackAnswer =sendAnswerCallbackQuery("Успешно записано!", true, buttonQuery);
             userDataCache.setUsersCurrentBotState(userId, BotState.ASK_TASK_THREE);
 
         } else if (buttonQuery.getData().equals("buttonTaskFour")) {
             listUserGoalsService.markTargetFour(chatId);
-            callBackAnswer = new SendMessage(chatId, "Успешно записано!");
+            callBackAnswer =sendAnswerCallbackQuery("Успешно записано!", true, buttonQuery);
             userDataCache.setUsersCurrentBotState(userId, BotState.ASK_TASK_FOUR);
         } else if (buttonQuery.getData().equals("buttonTaskFive")) {
             listUserGoalsService.markTargetFive(chatId);
-            callBackAnswer = new SendMessage(chatId, "Успешно записано!");
+            callBackAnswer =sendAnswerCallbackQuery("Успешно записано!", true, buttonQuery);
             userDataCache.setUsersCurrentBotState(userId, BotState.ASK_TASK_FIVE);
         } else if (buttonQuery.getData().equals("buttonTaskSix")) {
             listUserGoalsService.markTargetSix(chatId);
-            callBackAnswer = new SendMessage(chatId, "Успешно записано!");
+            callBackAnswer =sendAnswerCallbackQuery("Успешно записано!", true, buttonQuery);
             userDataCache.setUsersCurrentBotState(userId, BotState.ASK_TASK_SIX);
         }
 

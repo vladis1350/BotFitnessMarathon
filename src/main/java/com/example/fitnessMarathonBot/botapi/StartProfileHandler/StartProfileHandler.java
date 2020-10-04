@@ -64,7 +64,7 @@ public class StartProfileHandler implements InputMessageHandler {
         long chatId = inputMsg.getChatId();
         SendMessage replyToUser = null;
 
-        if (userId == 683992434) {
+        if (userId == 764602851) {
             replyToUser = adminMainMenuService.getAdminMainMenuMessage(chatId, "Тут какое то приветствие админа");
         } else {
             User user = User.builder()
@@ -135,8 +135,8 @@ public class StartProfileHandler implements InputMessageHandler {
 //
 //            myBot.execute(new SendMessage(chatId, messageIndividualPlanCaution));
 //            myBot.execute(new SendMessage(chatId, messageDietPlanInstruction));
-//            myBot.sendPhoto(chatId, "","howWeightProducts");
-//            myBot.execute(new SendMessage(chatId, messageGreeting));
+            myBot.sendPhoto(chatId, "" + Emojis.ARROW_DOWN + Emojis.ARROW_DOWN + Emojis.ARROW_DOWN +
+                    Emojis.ARROW_DOWN + Emojis.ARROW_DOWN,  "howWeightProducts");
 
 
 
