@@ -13,12 +13,18 @@ public class WebHookController {
 
     private final Bot telegramBot;
 
-    public WebHookController(Bot telegramBot) {
+    public WebHookController
+
+
+
+            (Bot telegramBot) {
         this.telegramBot = telegramBot;
     }
 
     @RequestMapping(value = "/", method = RequestMethod.POST)
     public BotApiMethod<?> onUpdateReceived(@RequestBody Update update) {
+
+
 
         return telegramBot.onWebhookUpdateReceived(update);
     }

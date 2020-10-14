@@ -29,9 +29,7 @@ public class StartProfileHandler implements InputMessageHandler {
     private UserDataCache userDataCache;
     private AdminMainMenuService adminMainMenuService;
     private Bot myBot;
-
     private PhotoKeeper photoKeeper;
-
     public StartProfileHandler(ReplyMessagesService messagesService, UserDataCache userDataCache,
                                AdminMainMenuService adminMainMenuService, @Lazy Bot myBot, PhotoKeeper photoKeeper) {
         this.messagesService = messagesService;
@@ -40,7 +38,6 @@ public class StartProfileHandler implements InputMessageHandler {
         this.myBot = myBot;
         this.photoKeeper = photoKeeper;
     }
-
     @SneakyThrows
     @Override
     public SendMessage handle(Message message) {
@@ -68,7 +65,8 @@ public class StartProfileHandler implements InputMessageHandler {
         } else {
             String messageStart = messagesService.getReplyText("reply.askStart");
             String messageLinkInstagram = String.format(messagesService.getReplyText("reply.linkInstagram"),
-                    Emojis.POINT_DOWN, Emojis.POINT_DOWN, Emojis.POINT_DOWN, Emojis.POINT_DOWN, Emojis.POINT_DOWN, Emojis.HEART);
+                    Emojis.POINT_DOWN, Emojis.POINT_DOWN, Emojis.POINT_DOWN,
+                    Emojis.POINT_DOWN, Emojis.POINT_DOWN, Emojis.HEART);
             String messageGreeting = String.format(messagesService.getReplyText("reply.greeting"),
                     Emojis.HEART, Emojis.POINT_DOWN);
             String messageWhatAwaitsUs = String.format(messagesService.getReplyText("reply.whatAwaitsUs"),
@@ -76,9 +74,16 @@ public class StartProfileHandler implements InputMessageHandler {
             String messageControl = String.format(messagesService.getReplyText("reply.Control"), Emojis.POINT_DOWN, Emojis.POINT_DOWN, Emojis.POINT_DOWN);
             String messageTrackingHabits = messagesService.getReplyText("reply.TrackingHabits");
             String messageDayOne = String.format(messagesService.getReplyText("reply.DayOne"), Emojis.WARNING, Emojis.HEART,
-                    Emojis.ARROW_RIGHT, Emojis.ARROW_RIGHT, Emojis.POINT_RIGHT, Emojis.POINT_RIGHT, Emojis.POINT_RIGHT,
-                    Emojis.HEAVY_CHECK_MARK, Emojis.POINT_RIGHT, Emojis.ARROW_RIGHT, Emojis.POINT_RIGHT, Emojis.GRIN,
-                    Emojis.ARROW_RIGHT, Emojis.WARNING, Emojis.ARROW_RIGHT);
+                    Emojis.ARROW_RIGHT, Emojis.ARROW_RIGHT,
+                    Emojis.POINT_RIGHT, Emojis.POINT_RIGHT, Emojis.POINT_RIGHT,
+                    Emojis.HEAVY_CHECK_MARK,
+                    Emojis.POINT_RIGHT,
+                    Emojis.ARROW_RIGHT,
+                    Emojis.POINT_RIGHT,
+                    Emojis.GRIN,
+                    Emojis.ARROW_RIGHT,
+                    Emojis.WARNING,
+                    Emojis.ARROW_RIGHT);
             String messageToday = String.format(messagesService.getReplyText("reply.Today"), Emojis.POINT_RIGHT, Emojis.POINT_RIGHT,
                     Emojis.POINT_RIGHT);
             String messageIndividualPlanCaution = String.format(messagesService.getReplyText("reply.IndividualPlanCaution"), Emojis.BLUSH);

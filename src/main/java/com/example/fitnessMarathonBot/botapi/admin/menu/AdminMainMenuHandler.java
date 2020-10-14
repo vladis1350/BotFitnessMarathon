@@ -16,7 +16,9 @@ public class AdminMainMenuHandler implements InputMessageHandler {
     private AdminMainMenuService adminMainMenuService;
     private UserDataCache userDataCache;
 
-    public AdminMainMenuHandler(ReplyMessagesService messagesService, AdminMainMenuService adminMainMenuService, UserDataCache userDataCache) {
+    public AdminMainMenuHandler(ReplyMessagesService messagesService,
+                                AdminMainMenuService adminMainMenuService,
+                                UserDataCache userDataCache) {
         this.messagesService = messagesService;
         this.adminMainMenuService = adminMainMenuService;
         this.userDataCache = userDataCache;
@@ -26,7 +28,8 @@ public class AdminMainMenuHandler implements InputMessageHandler {
     public SendMessage handle(Message message) {
 
         userDataCache.setUsersCurrentBotState(message.getFrom().getId(), BotState.SHOW_ADMIN_MAIN_MENU);
-        return adminMainMenuService.getAdminMainMenuMessage(message.getChatId(), messagesService.getReplyText("reply.ShowAdminMainMenu"));
+        return adminMainMenuService.getAdminMainMenuMessage(message.getChatId(),
+                messagesService.getReplyText("reply.ShowAdminMainMenu"));
     }
 
     @Override
